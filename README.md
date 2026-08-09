@@ -1,6 +1,6 @@
 <center>
 
-# Eslium Backport for 1.16.5
+# Eslium Backport
 
 [![Modrinth Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/available/modrinth_vector.svg)](https://modrinth.com/project/5gn0R1Gq)
 [![Github Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/available/github_vector.svg)](https://github.com/1szco1/Eslium-Backport)
@@ -41,7 +41,7 @@ When using an end crystal on obisidian or bedrock, the spawn of the end crystal 
 
 </details>
 
-## Predictions Coming Soon™ :
+## Predictions Added so far* :
 - Cooldowns
 - Consumables
 - Elytra
@@ -168,7 +168,7 @@ I'm thinking in particular of Health Indicator, Armor HUD, AppleSkin, FreeCam, a
 - Other ping's optimizer are allowed, such as Marlow's Crystal Optimizer, Hero's Elytra Optimizer, Consumable Optimizer or Anchor Optimizer
 
 ### Will versions 4.0+ be backported for minecraft 1.16.5?
-Yes, it is planned.
+Yes, it already have.
 
 ## Compatibility
 Eslium should work on any client.
