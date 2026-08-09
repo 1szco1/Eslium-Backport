@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "clienthings",
+  "version": "${version}",
+  "name": "ClienThings 1.16.5",
+  "description": "Backport of Eslium - Predicts server actions client-side to compensate for ping",
+  "authors": ["Solmey (original)", "Backport"],
+  "contact": {
+    "homepage": "https://github.com/Solmeye/Eslium",
+    "sources": "https://github.com/Solmeye/Eslium"
+  },
+  "license": "LGPL-3.0-only",
+  "icon": "assets/clienthings/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "fr.solmey.clienthings.ClienThings"
+    ]
+  },
+  "mixins": [
+    "clienthings.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.0",
+    "minecraft": "~1.16.5",
+    "java": ">=8"
+  }
+}

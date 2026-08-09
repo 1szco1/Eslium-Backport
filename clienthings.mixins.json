@@ -1,0 +1,97 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "package": "fr.solmey.clienthings.mixin",
+  "client": [
+    "consumables.LivingEntityMixin",
+    "consumables.FoodComponentMixin",
+    "consumables.ChorusFruitItemMixin",
+    "consumables.PotionItemMixin",
+    "consumables.EnchantedGoldenAppleItemMixin",
+
+    "cooldowns.ClientPlayNetworkHandlerMixin",
+
+    "crystals.EndCrystalItemMixin",
+    "crystals.EntityAccessor",
+    "crystals.EntityMixin",
+    "crystals.MinecraftClientAccessor",
+    "crystals.PlayerEntityMixin",
+
+    "elytras.ClientPlayNetworkHandlerMixin",
+    "elytras.EntityAccessor",
+    "elytras.LivingEntityAccessor",
+    "elytras.LivingEntityMixin",
+    "elytras.MinecraftClientMixin",
+
+    "firework.FireworkRocketEntityAccessor",
+    "firework.FireworkRocketItemMixin",
+    "firework.FireworkRocketEntityMixin",
+
+    "minecarts.MinecartEntityMixin",
+    "minecarts.MinecartItemMixin",
+
+    "optout.ClientPlayNetworkHandlerMixin",
+
+    "pose.ClientPlayNetworkHandlerMixin",
+
+    "swap.MinecraftClientMixin",
+
+    "system.ClientPlayerEntityMixin",
+    "system.ClientPlayNetworkHandlerMixin",
+    "system.MinecraftClientMixin",
+
+    "weapons.crossbow.CrossbowItemMixin",
+    "weapons.trident.PlayerEntityMixin",
+    "weapons.trident.TridentItemMixin",
+
+    "windcharge.AbstractWindChargeEntityMixin",
+    "windcharge.WindChargeItemMixin",
+
+    "throwables.EnderPearlItemMixin",
+    "throwables.SnowballItemMixin",
+    "throwables.EggItemMixin",
+    "throwables.ExperienceBottleItemMixin",
+    "throwables.EyeOfEnderItemMixin",
+    "throwables.SplashPotionItemMixin",
+    "throwables.LingeringPotionItemMixin",
+
+    "placeables.SpawnEggItemMixin",
+    "placeables.ArmorStandItemMixin",
+    "placeables.ItemFrameItemMixin",
+    "placeables.SignItemMixin",
+
+    "interactables.BedBlockMixin",
+    "interactables.RespawnAnchorBlockMixin",
+    "interactables.TntBlockMixin",
+    "interactables.NoteBlockMixin",
+    "interactables.JukeboxBlockMixin",
+    "interactables.DragonEggBlockMixin",
+    "interactables.DoorBlockMixin",
+    "interactables.TrapdoorBlockMixin",
+    "interactables.ButtonBlockMixin",
+    "interactables.LeverBlockMixin",
+
+    "tools.FlintAndSteelItemMixin",
+    "tools.BucketItemMixin",
+    "tools.HoeItemMixin",
+    "tools.ShovelItemMixin",
+    "tools.AxeItemMixin",
+    "tools.BoneMealItemMixin",
+    "tools.ShearsItemMixin",
+
+    "combat.BowItemMixin",
+    "combat.FishingRodItemMixin",
+    "combat.ShieldItemMixin",
+
+    "redstone.RedstoneWireBlockMixin",
+    "redstone.RepeaterBlockMixin",
+    "redstone.ComparatorBlockMixin"
+  ],
+  "server": [
+    "optout.ServerPlayNetworkHandlerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

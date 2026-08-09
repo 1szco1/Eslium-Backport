@@ -1,0 +1,7 @@
+package fr.solmey.clienthings.config;
+
+public class SpawnEgg {
+    public Boolean enabled = true;
+    public Servers servers = new Servers();
+    public Integer maxTime = 5000;
+}
