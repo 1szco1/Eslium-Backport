@@ -1,0 +1,174 @@
+<center>
+
+# Eslium Backport for 1.16.5
+
+[![Modrinth Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/available/modrinth_vector.svg)](https://modrinth.com/project/5gn0R1Gq)
+[![Github Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/available/github_vector.svg)](https://github.com/1szco1/Eslium-Backport)
+[![Discord Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/social/discord-singular_vector.svg)](https://discord.com/users/1134017208410968064)
+[![YouTube Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/social/youtube-singular_vector.svg)](https://youtube.com/@1szco1)
+
+[![Fabric Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/supported/fabric_vector.svg)](https://fabricmc.net/)
+[![Quilt Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/supported/quilt_vector.svg)](https://quiltmc.org/)
+[![NeoForge Icon](https://raw.githubusercontent.com/Solmeye/Mirror-Anticheat/2b0ed26bc9fd49f2f1c6b8aa289dbb81cd0db956/neoforge.svg)](https://neoforged.net/)
+[![Forge Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/supported/forge_vector.svg)](https://files.minecraftforge.net/net/minecraftforge/forge/)
+
+</center>
+
+## What's Eslium ?
+
+Eslium is a project to predict more things client-side.
+For example, if you want to use a Crystal, you must wait for the server validation for it to appear.
+This mod fixes that and therefore compensates for the ping.
+
+## Credits
+
+- **Original mod:** [Eslium on Modrinth](https://modrinth.com/project/5gn0R1Gq) by [@Solmeye](https://github.com/Solmeye)
+- **Backport:** [@1szco1](https://github.com/1szco1)
+
+## Predictions implemented
+
+<details>
+<summary>Minecarts</summary>
+
+When using any type of minecart on a rail, the spawn of the minecart is predicted
+
+</details>
+
+<details>
+<summary>End Crystal</summary>
+
+When using an end crystal on obisidian or bedrock, the spawn of the end crystal is predicted
+
+</details>
+
+## Predictions Coming Soon™ :
+- Cooldowns
+- Consumables
+- Elytra
+- Firework rocket
+- Swap
+- Inventory
+- Entity pose
+- Jukebox
+- Crossbow
+- Pickup entities
+- Trident
+- Weapons
+- Jukebox
+- Bottle o' Enchanting
+- Experience
+- Ender Pearls
+- Potions
+- Pick Block
+- Cactus damage
+- Bed
+- Fishing Rod
+- Lead
+- Boat
+- Snowball
+- Spawn Eggs
+- Egg
+- Armor Stand
+- Note block
+- Item frame
+- Dyes
+- Interfaces
+- Void damage
+- Game mode change
+- Potion Effects
+- Tchat
+- Sounds
+- Crafting
+- Scaffolding
+- Knockback
+- Fall damage
+- Interaction with blocks
+- Interaction with entities
+- Interaction with items
+
+
+## Configuration
+
+<details>
+<summary>Default configuration</summary>
+
+```
+{
+  "enabled": true,
+  "latencyMargin": 25,
+  "version": 1,
+  "safeMode": false,
+  "crystal": {
+    "enabled": true
+  },
+  "minecart": {
+    "enabled": true
+  }
+}
+```
+
+</details>
+
+<details>
+<summary>Explanation</summary>
+
+- `enabled`
+Enable or disable the mod
+
+- `latencyMargin`
+Ping to add to your estimated latency. Useful to avoid considering certain actions that are denied by the server due to a latency spike. Is supposed to represent the current latency fluctuation of your Internet connection. In ms.
+
+- `version`
+Version of the configuration. Do not touch!
+
+- `safeMode`
+Reduces the likelihood of being flagged by an impossible anticheat. Disabled, the probability is already low. Warning : This can lead to bizarre behavior.
+
+- `crystal`
+  - `enabled`
+  Enable or disable the crystal prediction
+
+- `minecart`
+  - `enabled`
+  Enable or disable the minecart prediction
+
+</details>
+
+## Disclaimer
+
+Allowed on servers such as:
+- `PvPClub`
+- `FadedMC`
+- `Turtled`
+- `CatPvP`
+
+Versions 4.0+ are designed not to trigger anticheats.
+However, a bug is not inevitable, so it is still recommended to request authorization for this mod before using it on a server.
+
+## FAQ
+### How it works ?
+This mod uses mixins to inject code into Minecraft code. During certain actions, if implemented, the behavior of a vanilla server is replicated on the client side. 
+
+### Is this mod a cheat?
+You might think this mod is a cheat because it gives an advantage to those who don't have it, and these kinds of mods often raise these kinds of questions.
+
+Here are a few points :
+
+- Some people naturally have lower ping, yet it is not considered cheating
+
+- It is possible to have 0ms ping behavior in vanilla, but it is also possible to have it (as far as it is implemented) with any ping and Eslium.
+
+- Some mods remain accepted by the community but their behavior is impossible to reproduce in vanilla.
+I'm thinking in particular of Health Indicator, Armor HUD, AppleSkin, FreeCam, and Ok Zoomer.
+
+- This mod has been accepted by Modrinth and some PvP servers.
+
+- Sodium optimize FPS, Lithium optimize MSPT, Eslium optimize the ping's impact.
+
+- Other ping's optimizer are allowed, such as Marlow's Crystal Optimizer, Hero's Elytra Optimizer, Consumable Optimizer or Anchor Optimizer
+
+### Will versions 4.0+ be backported for minecraft 1.16.5?
+Yes, it is planned.
+
+## Compatibility
+Eslium should work on any client.
