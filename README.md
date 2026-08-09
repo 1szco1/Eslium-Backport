@@ -22,7 +22,7 @@ This mod fixes that and therefore compensates for the ping.
 
 ## Credits
 
-- **Original mod:** [Eslium on Modrinth](https://modrinth.com/project/5gn0R1Gq) by [@Solmeye](https://github.com/Solmeye)
+- **Original mod:** [Eslium on Modrinth](https://modrinth.com/project/zaVwh7an) by [@Solmeye](https://github.com/Solmeye)
 - **Backport:** [@1szco1](https://github.com/1szco1)
 
 ## Predictions implemented
