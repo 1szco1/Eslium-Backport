@@ -9,7 +9,7 @@
 
 [![Fabric Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/supported/fabric_vector.svg)](https://fabricmc.net/)
 [![Quilt Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/supported/quilt_vector.svg)](https://quiltmc.org/)
-[![NeoForge Icon](https://raw.githubusercontent.com/Solmeye/Mirror-Anticheat/2b0ed26bc9fd49f2f1c6b8aa289dbb81cd0db956/neoforge_vector.svg)](https://neoforged.net/)
+[![NeoForge Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/supported/neoforge_vector.svg)](https://neoforged.net/)
 [![Forge Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/supported/forge_vector.svg)](https://files.minecraftforge.net/net/minecraftforge/forge/)
 
 </center>
@@ -89,18 +89,18 @@ When using an end crystal on obisidian or bedrock, the spawn of the end crystal 
 
 ## Configuration
 
-The mod can be configured **in-game** through [Mod Menu](https://modrinth.com/mod/modmenu) (optional dependency) or with the rebindable keybind **`key.clienthings.open_config`** (unbound by default — set it in *Options → Controls*). The configuration is stored at `config/eslium.json`.
+The mod can be configured **in-game** through [Mod Menu](https://modrinth.com/mod/modmenu) (optional dependency) or with the rebindable keybind **`key.clienthings.open_config`** (unbound by default - set it in *Options → Controls*). The configuration is stored at `config/eslium.json`.
 
 Every prediction section shares the same base options:
 
-- `enabled` – toggle this prediction
-- `servers` – which server types it applies to (applies if **any** is enabled):
-  - `CUSTOM` – servers using the Eslium protocol
-  - `MODDED` – modded servers
-  - `PLUGIN` – plugin-based servers
-  - `VANILLA` – vanilla servers
-- `maxTime` – maximum time in ms to keep a predicted (not yet confirmed) action alive
-- `maxDistance` – maximum distance in blocks for the prediction (where applicable)
+- `enabled` - toggle this prediction
+- `servers` - which server types it applies to (applies if **any** is enabled):
+  - `CUSTOM` - servers using the Eslium protocol
+  - `MODDED` - modded servers
+  - `PLUGIN` - plugin-based servers
+  - `VANILLA` - vanilla servers
+- `maxTime` - maximum time in ms to keep a predicted (not yet confirmed) action alive
+- `maxDistance` - maximum distance in blocks for the prediction (where applicable)
 
 <details>
 <summary>Default configuration</summary>
@@ -165,35 +165,35 @@ Every prediction section shares the same base options:
 
 **Global options**
 
-- `enabled` – enable or disable the whole mod
-- `optout` – opts this client out of the Eslium protocol
-- `debug` – print debug information to the log (only active while `enabled` is true)
-- `experimental` – allow experimental predictions
-- `latencyMargin` – ping in ms added to your estimated latency. Useful to avoid considering actions the server denies after a latency spike. Should represent the current latency fluctuation of your connection.
-- `version` – configuration version. Do not touch!
-- `safeMode` – reduces the likelihood of being flagged by an impossible anticheat. The probability is already low when disabled. Warning: this can lead to bizarre behavior.
+- `enabled` - enable or disable the whole mod
+- `optout` - opts this client out of the Eslium protocol
+- `debug` - print debug information to the log (only active while `enabled` is true)
+- `experimental` - allow experimental predictions
+- `latencyMargin` - ping in ms added to your estimated latency. Useful to avoid considering actions the server denies after a latency spike. Should represent the current latency fluctuation of your connection.
+- `version` - configuration version. Do not touch!
+- `safeMode` - reduces the likelihood of being flagged by an impossible anticheat. The probability is already low when disabled. Warning: this can lead to bizarre behavior.
 
 **Sections**
 
 All sections below share `enabled`, `servers`, and (where shown) `maxTime` / `maxDistance`: `consumables`, `cooldowns`, `crystals`, `elytras`, `firework`, `minecart`, `pose`, `swap`, `weapons`, `windcharge`, `throwables`, `placeables`, `interactables`, `tools`, `combat`, `redstone`, `anchors`, `placement`.
 
 - `crystals`
-  - `delay` – fixed delay in ms before a hit crystal is hidden when `dynamicDelay` is off (0–200)
-  - `dynamicDelay` – when enabled, the delay is estimated automatically from your latency instead of using `delay`
-  - `resync` – number of ticks to hide/resync a real crystal before it is shown again (0–50)
-  - `autoDestroy` – automatically remove the client-side crystal prediction after a delay
+  - `delay` - fixed delay in ms before a hit crystal is hidden when `dynamicDelay` is off (0-200)
+  - `dynamicDelay` - when enabled, the delay is estimated automatically from your latency instead of using `delay`
+  - `resync` - number of ticks to hide/resync a real crystal before it is shown again (0-50)
+  - `autoDestroy` - automatically remove the client-side crystal prediction after a delay
     - `enabled` / `maxTime`
 
 - `anchors`
-  - `glowstoneSound` – play the charge sound client-side
-  - `clientExplosion` – show the detonation explosion client-side
-  - `reInteract` – allow re-interacting with the anchor before the server confirms
-  - `ghostAnchor` – hide a stale (ghost) anchor block
+  - `glowstoneSound` - play the charge sound client-side
+  - `clientExplosion` - show the detonation explosion client-side
+  - `reInteract` - allow re-interacting with the anchor before the server confirms
+  - `ghostAnchor` - hide a stale (ghost) anchor block
 
-- `placement` – fixes block-placement "ghosting" (a placed block briefly reverting to its old state)
-  - `dynamic` – derive the settle window automatically from your measured latency
-  - `fixedWindowMs` – window used when `dynamic` is false
-  - `floorMs` / `capMs` – lower/upper bounds for the dynamic window
+- `placement` - fixes block-placement "ghosting" (a placed block briefly reverting to its old state)
+  - `dynamic` - derive the settle window automatically from your measured latency
+  - `fixedWindowMs` - window used when `dynamic` is false
+  - `floorMs` / `capMs` - lower/upper bounds for the dynamic window
 
 </details>
 
