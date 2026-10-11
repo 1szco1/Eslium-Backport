@@ -37,12 +37,27 @@ public class Entities {
     }
 
     public static void set(long _timestamp, Entity _Entity, Entity _initialEntity, byte _type) {
-        int cursor = 0;
         clear();
-        for (int i = 0; i < 256; i++)
-            if (timestamps[i] == 0)
+        int cursor = -1;
+        for (int i = 0; i < 256; i++) {
+            if (timestamps[i] == 0) {
                 cursor = i;
-
+                break;
+            }
+        }
+        if (cursor == -1) {
+            long oldest = Long.MAX_VALUE;
+            cursor = 0;
+            for (int i = 0; i < 256; i++) {
+                if (timestamps[i] < oldest) {
+                    oldest = timestamps[i];
+                    cursor = i;
+                }
+            }
+            if (entities[cursor] != null) {
+                remove(entities[cursor]);
+            }
+        }
         timestamps[cursor] = _timestamp;
         entities[cursor] = _Entity;
         initialEntities[cursor] = _initialEntity;
@@ -50,25 +65,34 @@ public class Entities {
     }
 
     public static void clear() {
+        long now = System.currentTimeMillis();
         for (int i = 0; i < 256; i++) {
             if (entities[i] != null) {
                 boolean shouldRemove = false;
                 int maxTime = 5000;
 
                 if (entities[i] instanceof EndCrystalEntity) {
-                    maxTime = JsonConfig.config.crystals.autoDestroy.maxTime;
-                    shouldRemove = System.currentTimeMillis() - timestamps[i] >= maxTime && timestamps[i] != 0;
+                    if (JsonConfig.config != null && JsonConfig.config.crystals != null && JsonConfig.config.crystals.autoDestroy != null && JsonConfig.config.crystals.autoDestroy.maxTime != null) {
+                        maxTime = JsonConfig.config.crystals.autoDestroy.maxTime;
+                    }
+                    shouldRemove = (now - timestamps[i] >= maxTime) && timestamps[i] != 0;
                 } else if (entities[i] instanceof FireworkRocketEntity) {
-                    maxTime = JsonConfig.config.firework.maxTime;
-                    shouldRemove = System.currentTimeMillis() - timestamps[i] >= maxTime && timestamps[i] != 0;
+                    if (JsonConfig.config != null && JsonConfig.config.firework != null && JsonConfig.config.firework.maxTime != null) {
+                        maxTime = JsonConfig.config.firework.maxTime;
+                    }
+                    shouldRemove = (now - timestamps[i] >= maxTime) && timestamps[i] != 0;
                 } else if (entities[i] instanceof TridentEntity) {
-                    maxTime = JsonConfig.config.weapons.maxTime;
-                    shouldRemove = System.currentTimeMillis() - timestamps[i] >= maxTime && timestamps[i] != 0;
+                    if (JsonConfig.config != null && JsonConfig.config.weapons != null && JsonConfig.config.weapons.maxTime != null) {
+                        maxTime = JsonConfig.config.weapons.maxTime;
+                    }
+                    shouldRemove = (now - timestamps[i] >= maxTime) && timestamps[i] != 0;
                 } else if (entities[i] instanceof AbstractMinecartEntity) {
-                    maxTime = JsonConfig.config.minecart.maxTime;
-                    shouldRemove = System.currentTimeMillis() - timestamps[i] >= maxTime && timestamps[i] != 0;
+                    if (JsonConfig.config != null && JsonConfig.config.minecart != null && JsonConfig.config.minecart.maxTime != null) {
+                        maxTime = JsonConfig.config.minecart.maxTime;
+                    }
+                    shouldRemove = (now - timestamps[i] >= maxTime) && timestamps[i] != 0;
                 } else {
-                    shouldRemove = System.currentTimeMillis() - timestamps[i] >= 5000 && timestamps[i] != 0;
+                    shouldRemove = (now - timestamps[i] >= 5000) && timestamps[i] != 0;
                 }
 
                 if (shouldRemove) {
@@ -79,9 +103,13 @@ public class Entities {
     }
 
     public static void remove(Entity entity) {
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player == null) return;
+        if (entity == null) return;
+        MinecraftClient mc = MinecraftClient.getInstance();
+        if (mc == null) return;
+        ClientPlayerEntity player = mc.player;
+        if (player == null || !(player.world instanceof ClientWorld)) return;
         ClientWorld clientWorld = (ClientWorld) player.world;
+        entity.remove();
         clientWorld.removeEntity(entity.getEntityId());
 
         for (int i = 0; i < entities.length; i++) {
@@ -95,6 +123,7 @@ public class Entities {
     }
 
     public static boolean has(Entity entity, byte _type) {
+        if (entity == null) return false;
         for (int i = 0; i < entities.length; i++)
             if (entities[i] == entity && type[i] == _type)
                 return true;
@@ -102,6 +131,7 @@ public class Entities {
     }
 
     public static byte getType(Entity entity) {
+        if (entity == null) return UNKNOWN;
         for (int i = 0; i < entities.length; i++)
             if (entities[i] == entity)
                 return type[i];
@@ -112,9 +142,8 @@ public class Entities {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc == null) return false;
         ClientPlayerEntity player = mc.player;
-        if (player == null) return false;
+        if (player == null || !(player.world instanceof ClientWorld)) return false;
         ClientWorld clientWorld = (ClientWorld) player.world;
-        if (clientWorld == null) return false;
 
         Entity entity = packet.getEntity(clientWorld);
         if (entity != null && packet.isPositionChanged() && has(entity, NOT_SYNCHRONISE)) {
@@ -145,22 +174,16 @@ public class Entities {
         }
 
         if (needed && bestDistance <= 16.0D) {
-            if (JsonConfig.config.debug) {
+            if (JsonConfig.config != null && JsonConfig.config.debug) {
                 System.out.println("[Eslium] Matched fake entity, removing it. Distance: " + Math.sqrt(bestDistance));
             }
-
-            // CRITICAL FIX: Actually remove the fake entity from the world before the real one spawns
-            // This prevents "ghost" entities that stay forever
             if (cursorFake >= 0 && entities[cursorFake] != null) {
                 remove(entities[cursorFake]);
             }
-
             timestamps[cursorFake] = 0;
             entities[cursorFake] = null;
             initialEntities[cursorFake] = null;
             type[cursorFake] = UNKNOWN;
-
-            // Return false to let the real entity spawn from the packet
             return false;
         }
 

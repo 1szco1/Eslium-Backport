@@ -26,6 +26,18 @@ public class JsonConfig {
             config = new Config();
             saveConfig();
         }
+        if (config == null) {
+            config = new Config();
+        }
+        if (config.anchors == null) {
+            config.anchors = new Anchors();
+        }
+        if (config.crystals == null) {
+            config.crystals = new Crystals();
+        }
+        if (config.placement == null) {
+            config.placement = new Placement();
+        }
     }
 
     public static void saveConfig() {
@@ -40,7 +52,7 @@ public class JsonConfig {
     }
 
     public static boolean shouldWork(Servers servers) {
-        if (!config.enabled) return false;
+        if (config == null || !config.enabled) return false;
         if (servers == null) return true;
         return servers.CUSTOM || servers.MODDED || servers.PLUGIN || servers.VANILLA;
     }
