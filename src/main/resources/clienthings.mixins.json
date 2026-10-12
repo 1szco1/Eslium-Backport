@@ -4,6 +4,11 @@
   "compatibilityLevel": "JAVA_8",
   "package": "fr.solmey.clienthings.mixin",
   "client": [
+    "ClientConnectionMixin",
+    "MinecraftClientMixin",
+    "anticheat.ClientWorldMixin",
+    "anticheat.MinecraftMixin",
+    "rollback.ClientPlayNetworkHandlerMixin",
     "anchors.GameRendererMixin",
     "anchors.WorldRendererMixin",
     "consumables.LivingEntityMixin",

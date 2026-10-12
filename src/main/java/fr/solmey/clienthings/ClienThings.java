@@ -5,6 +5,7 @@ import fr.solmey.clienthings.config.gui.ConfigGui;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 
@@ -28,5 +29,16 @@ public class ClienThings implements ClientModInitializer {
         if (JsonConfig.config.debug && JsonConfig.config.enabled) {
             System.out.println("[Eslium 1.16.5] Debug mode enabled");
         }
+    }
+
+    public static boolean shouldWork() {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        if (mc == null || mc.world == null || mc.player == null || mc.isInSingleplayer() || mc.getNetworkHandler() == null) {
+            return false;
+        }
+        if (JsonConfig.config == null) return false;
+        if (!JsonConfig.config.enabled) return false;
+
+        return true;
     }
 }

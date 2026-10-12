@@ -8,6 +8,7 @@ public class Config {
     public Integer latencyMargin = 25;
     public Integer version = 1;
     public Boolean safeMode = false;
+    public Integer simulatedDesync = 100;
     public Consumables consumables = new Consumables();
     public Cooldowns cooldowns = new Cooldowns();
     public Crystals crystals = new Crystals();

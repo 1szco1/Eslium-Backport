@@ -114,6 +114,7 @@ Every prediction section shares the same base options:
   "latencyMargin": 25,
   "version": 1,
   "safeMode": false,
+  "simulatedDesync": 100,
   "consumables": { "enabled": false, "servers": { "CUSTOM": true, "MODDED": true, "PLUGIN": true, "VANILLA": true }, "maxTime": 5000, "maxDistance": 16 },
   "cooldowns": { "enabled": false, "servers": { "CUSTOM": true, "MODDED": true, "PLUGIN": true, "VANILLA": true } },
   "crystals": {
@@ -172,6 +173,7 @@ Every prediction section shares the same base options:
 - `latencyMargin` - ping in ms added to your estimated latency. Useful to avoid considering actions the server denies after a latency spike. Should represent the current latency fluctuation of your connection.
 - `version` - configuration version. Do not touch!
 - `safeMode` - reduces the likelihood of being flagged by an impossible anticheat. The probability is already low when disabled. Warning: this can lead to bizarre behavior.
+- `simulatedDesync` - percentage (0-100) of the maximum client-server tick desynchronization time used to simulate vanilla desynchronization, which keeps the prediction statistically fair. In singleplayer this is effectively `0`, and against a local server it averages around `50`. Default `100`.
 
 **Sections**
 
