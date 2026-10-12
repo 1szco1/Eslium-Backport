@@ -5,6 +5,7 @@ import java.io.File;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.solmey.eslium.config.ConfigManager;
 
@@ -21,9 +22,7 @@ public class Eslium {
 
     private static void ensureDirectoriesReady() {
         if (configDir == null) {
-            File serverRoot = new File(System.getProperty("user.dir"));
-
-            configDir = new File(serverRoot, "config");
+            configDir = FabricLoader.getInstance().getConfigDir().toFile();
         }
 
         if (!configDir.exists()) {
@@ -32,6 +31,7 @@ public class Eslium {
     }
 
     public static File getConfigDir() {
+        ensureDirectoriesReady();
         return configDir;
     }
 
