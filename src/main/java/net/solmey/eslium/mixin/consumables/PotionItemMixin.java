@@ -8,19 +8,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.solmey.eslium.config.ConfigManager;
 
-@Mixin(PotionItem.class)
+@Mixin(Item.class)
 public class PotionItemMixin {
     @Inject(method = "finishUsingItem", at = @At("HEAD"), cancellable = true)
     private void eslium$finishUsingItem(ItemStack stack, Level world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
         if (ConfigManager.getConfig() == null) return;
         if (ConfigManager.getConfig().consumables.enabled && ConfigManager.shouldWork(ConfigManager.getConfig().consumables.servers)) {
-            if (world.isClientSide()) {
+            if (world.isClientSide() && stack.getItem() instanceof PotionItem) {
                 PotionContents contents = stack.get(DataComponents.POTION_CONTENTS);
                 if (contents != null) {
                     for (MobEffectInstance effect : contents.getAllEffects()) {
