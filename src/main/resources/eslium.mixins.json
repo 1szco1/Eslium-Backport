@@ -1,0 +1,102 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.solmey.eslium.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "anticheat.MinecraftMixin",
+    "anticheat.ClientLevelMixin",
+
+    "anchors.GameRendererMixin",
+    "anchors.RespawnAnchorBlockMixin",
+
+    "combat.BowItemMixin",
+    "combat.FishingRodItemMixin",
+
+    "consumables.EnchantedGoldenAppleItemMixin",
+    "consumables.LivingEntityMixin",
+    "consumables.PotionItemMixin",
+
+    "cooldowns.ClientPlayNetworkHandlerMixin",
+
+    "crystal.EndCrystalItemMixin",
+    "crystals.EndCrystalEntityMixin",
+    "crystals.EntityMixin",
+    "crystals.PlayerEntityMixin",
+
+    "elytras.ClientPlayNetworkHandlerMixin",
+    "elytras.EntityAccessor",
+    "elytras.LivingEntityMixin",
+    "elytras.MinecraftClientMixin",
+
+    "entrypoint.MinecraftMixin",
+
+    "firework.FireworkRocketEntityMixin",
+    "firework.FireworkRocketItemMixin",
+
+    "interactables.BedBlockMixin",
+    "interactables.ButtonBlockMixin",
+    "interactables.DoorBlockMixin",
+    "interactables.DragonEggBlockMixin",
+    "interactables.JukeboxBlockMixin",
+    "interactables.LeverBlockMixin",
+    "interactables.NoteBlockMixin",
+    "interactables.TntBlockMixin",
+
+    "minecart.MinecartItemMixin",
+    "minecarts.MinecartEntityMixin",
+
+    "optout.ClientPlayNetworkHandlerMixin",
+    "optout.ServerPlayNetworkHandlerMixin",
+
+    "placeables.ArmorStandItemMixin",
+    "placeables.ItemFrameItemMixin",
+    "placeables.SignItemMixin",
+    "placeables.SpawnEggItemMixin",
+
+    "placement.BlockItemMixin",
+
+    "pose.ClientPlayNetworkHandlerMixin",
+
+    "redstone.ComparatorBlockMixin",
+    "redstone.RepeaterBlockMixin",
+
+    "swap.MinecraftClientMixin",
+
+    "system.ClientPacketListenerMixin",
+
+    "throwables.EggItemMixin",
+    "throwables.EnderPearlItemMixin",
+    "throwables.ExperienceBottleItemMixin",
+    "throwables.EyeOfEnderItemMixin",
+    "throwables.LingeringPotionItemMixin",
+    "throwables.SnowballItemMixin",
+    "throwables.SplashPotionItemMixin",
+
+    "tools.AxeItemMixin",
+    "tools.BoneMealItemMixin",
+    "tools.BucketItemMixin",
+    "tools.FlintAndSteelItemMixin",
+    "tools.HoeItemMixin",
+    "tools.ShearsItemMixin",
+    "tools.ShovelItemMixin",
+
+    "weapons.crossbow.CrossbowItemMixin",
+    "weapons.trident.PlayerEntityMixin",
+    "weapons.trident.TridentItemMixin",
+
+    "windcharge.AbstractWindChargeEntityMixin",
+    "windcharge.WindChargeItemMixin",
+
+    "ClientPacketListenerMixin",
+    "ConnectionMixin",
+    "MinecraftMixin",
+    "PingDebugMonitorMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

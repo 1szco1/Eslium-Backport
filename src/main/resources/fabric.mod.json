@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${description}",
+  "authors": ["${authors}"],
+  "contact": {
+    "homepage": "${homepage}",
+    "discord": "${discord}"
+  },
+  "license": "${license}",
+  "icon": "${icon}",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "net.solmey.eslium.client.EsliumClient"
+    ],
+    "modmenu": [
+      "net.solmey.eslium.config.ModMenuIntegration"
+    ]
+  },
+  "mixins": ["${mod_id}.mixins.json"],
+  "depends": {
+    "fabricloader": ">=${min_loader_version}",
+    "minecraft": "${minecraft_range}",
+    "java": ">=${min_java}",
+    "fabric-api": "*"
+  },
+  "recommends": {
+    "modmenu": "*"
+  },
+  "accessWidener": "${mod_id}.accesswidener"
+}
