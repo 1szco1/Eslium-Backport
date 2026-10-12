@@ -1,16 +1,29 @@
 <center>
 
-## Eslium
+# Eslium
 
-[![Modrinth Icon](https://cdn.sqidgeon.uk/cozy/available/modrinth_vector.svg)](https://modrinth.com/project/zaVwh7an)
-[![Github Icon](https://cdn.sqidgeon.uk/cozy/available/github_vector.svg)](https://github.com/Solmeye/Eslium)
-[![Discord Icon](https://cdn.sqidgeon.uk/cozy/social/discord-plural_vector.svg)](https://discord.gg/FVq3j5heAc)
+[![Modrinth Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/available/modrinth_vector.svg)](https://modrinth.com/project/zaVwh7an)
+[![Github Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/available/github_vector.svg)](https://github.com/Solmeye/Eslium)
+[![Discord Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/social/discord-singular_vector.svg)](https://discord.gg/FVq3j5heAc)
+[![YouTube Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/social/youtube-singular_vector.svg)](https://youtube.com/@1szco1)
+
+[![Fabric Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/supported/fabric_vector.svg)](https://fabricmc.net/)
+[![Quilt Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/supported/quilt_vector.svg)](https://quiltmc.org/)
+[![NeoForge Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/supported/neoforge_vector.svg)](https://neoforged.net/)
+[![Forge Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/supported/forge_vector.svg)](https://files.minecraftforge.net/net/minecraftforge/forge/)
 
 </center>
+
+## What's Eslium ?
 
 Eslium is a project to predict more things client-side.
 For example, if you want to use a Crystal, you must wait for the server validation for it to appear.
 This mod fixes that and therefore compensates for the ping.
+
+## Credits
+
+- **Original mod:** [Eslium on Modrinth](https://modrinth.com/project/zaVwh7an) by [@Solmeye](https://github.com/Solmeye)
+- **1.21.11 port:** [@1szco1](https://github.com/1szco1)
 
 ## Predictions implemented
 
@@ -28,27 +41,20 @@ When using an end crystal on obisidian or bedrock, the spawn of the end crystal 
 
 </details>
 
-## Predictions ComingSoon™ :
-
-<details>
-<summary>Predictions ComingSoon™</summary>
-
-- Lunge enchant
-- Anchors
+## Predictions Added so far* :
 - Cooldowns
 - Consumables
 - Elytra
 - Firework rocket
 - Swap
 - Inventory
-- Cushion
 - Entity pose
-- Wind charge
 - Jukebox
 - Crossbow
 - Pickup entities
 - Trident
 - Weapons
+- Jukebox
 - Bottle o' Enchanting
 - Experience
 - Ender Pearls
@@ -76,12 +82,16 @@ When using an end crystal on obisidian or bedrock, the spawn of the end crystal 
 - Scaffolding
 - Knockback
 - Fall damage
+- Interaction with blocks
+- Interaction with entities
+- Interaction with items
 
-</details>
 
 ## Configuration
 
-The mod can be configured **in-game** through [Mod Menu](https://modrinth.com/mod/modmenu) (optional dependency). The configuration is stored at `config/eslium.json`.
+The mod can be configured **in-game** through [Mod Menu](https://modrinth.com/mod/modmenu) (optional dependency) or with the rebindable keybind **`key.eslium.open_config`** (unbound by default - set it in *Options → Controls*). The configuration is stored at `config/eslium.json`.
+
+The in-game menu lists every prediction. Each entry has an on/off toggle on its right, and clicking the entry itself opens a sub-menu with the dedicated settings for that option (server types, timings, distances, and so on), so everything can be changed on click without editing the file.
 
 Every prediction section shares the same base options:
 
@@ -191,6 +201,17 @@ All sections below share `enabled`, `servers`, and (where shown) `maxTime` / `ma
 
 </details>
 
+## Disclaimer
+
+Allowed on servers such as:
+- `PvPClub`
+- `FadedMC`
+- `Turtled`
+- `CatPvP`
+
+Versions 4.0+ are designed not to trigger anticheats.
+However, a bug is not inevitable, so it is still recommended to request authorization for this mod before using it on a server.
+
 ## FAQ
 ### How it works ?
 This mod uses mixins to inject code into Minecraft code. During certain actions, if implemented, the behavior of a vanilla server is replicated on the client side. 
@@ -207,14 +228,9 @@ Here are a few points :
 - Some mods remain accepted by the community but their behavior is impossible to reproduce in vanilla.
 I'm thinking in particular of Health Indicator, Armor HUD, AppleSkin, FreeCam, and Ok Zoomer.
 
-- This mod has been accepted by Modrinth and some PvP servers, such as
-  - `PvPClub`
-  - `FadedMC`
-  - `Turtled`
-  - `CatPvP`
-  - `Minemen`
+- This mod has been accepted by Modrinth and some PvP servers.
 
-- Sodium optimize FPS, Lithium optimize MSPT / TPS, Eslium optimize the ping's impact.
+- Sodium optimize FPS, Lithium optimize MSPT, Eslium optimize the ping's impact.
 
 - Other ping's optimizer are allowed, such as Marlow's Crystal Optimizer, Hero's Elytra Optimizer, Consumable Optimizer or Anchor Optimizer
 
@@ -236,6 +252,9 @@ Note: I played for months with this mod and I have never been banned
 - Alpha versions may be unstable and are only here to test the new functionnalities and fixes, regardless of their stability.
 
 For a casual player, beta or release versions are recommended.
+
+### Is Eslium available for other Minecraft versions?
+Yes, a 1.16.5 backport is available.
 
 ## Compatibility
 Eslium should work on any client.
