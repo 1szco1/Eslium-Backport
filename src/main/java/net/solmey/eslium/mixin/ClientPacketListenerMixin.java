@@ -4,13 +4,14 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.client.gui.components.DebugScreenOverlay;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.PingDebugMonitor;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -26,15 +27,18 @@ import net.solmey.eslium.util.BlockPrediction;
 @Mixin(ClientPacketListener.class)
 public class ClientPacketListenerMixin {
 
-    @Redirect(
-        method = "tick",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/components/DebugScreenOverlay;showNetworkCharts()Z"
-        )
-    ) // Tick from the debug screen overlay that pings the server to estimate the latency
-    private boolean eslium$showNetworkCharts(DebugScreenOverlay instance) {
-        return true;
+    @Shadow
+    private PingDebugMonitor pingDebugMonitor;
+
+    @Inject(method = "tick", at = @At("HEAD"))
+    // Vanilla only ticks the ping monitor while the debug network charts are visible.
+    // Ticking it here the rest of the time keeps latency samples fresh (previously a @Redirect,
+    // which is malformed on old MixinExtras builds and crashed the game).
+    private void eslium$keepLatencyFresh(CallbackInfo ci) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft != null && !minecraft.getDebugOverlay().showNetworkCharts()) {
+            this.pingDebugMonitor.tick();
+        }
     }
 
     @Inject(method = "handleBlockUpdate", at = @At("HEAD"))
