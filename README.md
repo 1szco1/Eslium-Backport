@@ -41,50 +41,25 @@ When using an end crystal on obisidian or bedrock, the spawn of the end crystal 
 
 </details>
 
-## Predictions Added so far* :
-- Cooldowns
+## Predictions Added so far:
 - Consumables
-- Elytra
-- Firework rocket
+- Cooldowns
+- Crystals
+- Elytras
+- Firework
+- Minecart
+- Pose
 - Swap
-- Inventory
-- Entity pose
-- Jukebox
-- Crossbow
-- Pickup entities
-- Trident
 - Weapons
-- Jukebox
-- Bottle o' Enchanting
-- Experience
-- Ender Pearls
-- Potions
-- Pick Block
-- Cactus damage
-- Bed
-- Fishing Rod
-- Lead
-- Boat
-- Snowball
-- Spawn Eggs
-- Egg
-- Armor Stand
-- Note block
-- Item frame
-- Dyes
-- Interfaces
-- Void damage
-- Game mode change
-- Potion Effects
-- Tchat
-- Sounds
-- Crafting
-- Scaffolding
-- Knockback
-- Fall damage
-- Interaction with blocks
-- Interaction with entities
-- Interaction with items
+- Windcharge
+- Throwables
+- Placeables
+- Interactables
+- Tools
+- Combat
+- Redstone
+- Anchors
+- Placement
 
 
 ## Configuration
