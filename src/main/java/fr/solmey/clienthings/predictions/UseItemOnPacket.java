@@ -24,6 +24,7 @@ public class UseItemOnPacket {
             PlayerEntity player = minecraft.player;
             if (player == null) return;
             World level = player.world;
+            if (level == null) return;
             Hand hand = sPacket.getHand();
             ItemStack itemStack = player.getStackInHand(hand);
 

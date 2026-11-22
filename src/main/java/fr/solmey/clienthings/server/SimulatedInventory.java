@@ -13,6 +13,11 @@ public class SimulatedInventory {
     public static List<ItemStack> serverInventory = new ArrayList<>();
     private static List<ItemStack> realInventory = new ArrayList<>();
 
+    public static void reset() {
+        serverInventory.clear();
+        realInventory.clear();
+    }
+
     public static void startServerTick(PlayerEntity player) {
         saveRealInventory(player);
         restoreServerInventory(player);

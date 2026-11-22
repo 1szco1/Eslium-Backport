@@ -26,7 +26,8 @@ public class ClienThings implements ClientModInitializer {
             }
         });
 
-        if (JsonConfig.config.debug && JsonConfig.config.enabled) {
+        if (JsonConfig.config != null && Boolean.TRUE.equals(JsonConfig.config.debug)
+                && Boolean.TRUE.equals(JsonConfig.config.enabled)) {
             System.out.println("[Eslium 1.16.5] Debug mode enabled");
         }
     }
@@ -36,9 +37,10 @@ public class ClienThings implements ClientModInitializer {
         if (mc == null || mc.world == null || mc.player == null || mc.isInSingleplayer() || mc.getNetworkHandler() == null) {
             return false;
         }
-        if (JsonConfig.config == null) return false;
-        if (!JsonConfig.config.enabled) return false;
+        // The handler holds its own world reference. During a disconnect or dimension
+        // change it can be cleared while mc.world is still set; applying packets then NPEs.
+        if (mc.getNetworkHandler().getWorld() != mc.world) return false;
 
-        return true;
+        return JsonConfig.config != null && Boolean.TRUE.equals(JsonConfig.config.enabled);
     }
 }

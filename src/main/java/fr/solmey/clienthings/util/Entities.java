@@ -105,12 +105,11 @@ public class Entities {
     public static void remove(Entity entity) {
         if (entity == null) return;
         MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc == null) return;
-        ClientPlayerEntity player = mc.player;
-        if (player == null || !(player.world instanceof ClientWorld)) return;
-        ClientWorld clientWorld = (ClientWorld) player.world;
-        entity.remove();
-        clientWorld.removeEntity(entity.getEntityId());
+        ClientPlayerEntity player = mc == null ? null : mc.player;
+        if (player != null && player.world instanceof ClientWorld) {
+            entity.remove();
+            ((ClientWorld) player.world).removeEntity(entity.getEntityId());
+        }
 
         for (int i = 0; i < entities.length; i++) {
             if (entities[i] == entity) {

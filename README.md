@@ -20,6 +20,11 @@ Eslium is a project to predict more things client-side.
 For example, if you want to use a Crystal, you must wait for the server validation for it to appear.
 This mod fixes that and therefore compensates for the ping.
 
+
+## Stability and performance
+
+Predicted packets and their client-side entity clones are now discarded when you leave a server, change worlds, or the mod becomes inactive, so nothing from an old connection can be replayed into a new one. Every prediction hook checks that the client world and the network handler's world are the same object before it runs, which removes the null-pointer crashes seen on disconnect and dimension changes. Inventory snapshots are size-bounded, entity lookups skip work when nothing is pending, and the config file is resolved lazily and validated on load.
+
 ## Credits
 
 - **Original mod:** [Eslium on Modrinth](https://modrinth.com/project/zaVwh7an) by [@Solmeye](https://github.com/Solmeye)

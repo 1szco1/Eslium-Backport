@@ -28,9 +28,13 @@ public class MinecraftClientMixin {
 
     @Inject(method = "tick", at = @At("HEAD")) // Start of the client tick
     private void eslium$tickHEAD(CallbackInfo callback) {
-        if (!ClienThings.shouldWork()) return;
+        if (!ClienThings.shouldWork()) {
+            if (Data.hasPendingState()) Data.clearAll();
+            return;
+        }
 
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        if (player == null) return;
         MixinMode.lastTimestamp = System.currentTimeMillis();
         SimulatedInventory.saveServerInventory(player);
 
@@ -53,6 +57,7 @@ public class MinecraftClientMixin {
     private void eslium$tickTAIL(CallbackInfo callback) {
         if (!ClienThings.shouldWork()) return;
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        if (player == null || !(player.world instanceof ClientWorld)) return;
         ClientWorld clientLevel = (ClientWorld) player.world;
 
         MixinMode.mixinMode = true;
@@ -76,13 +81,18 @@ public class MinecraftClientMixin {
         MixinMode.mixinMode = false;
 
         // If the real packet from the server is received before handling it, we need to rollback anyways
-        Data.extractPackets(Data.predictedPackets);
-        Data.extractedToBeValidedPackets.putAll(Data.predictedPackets);
+        if (!Data.predictedPackets.isEmpty()) {
+            Data.extractPackets(Data.predictedPackets);
+            Data.extractedToBeValidedPackets.putAll(Data.predictedPackets);
+        }
     }
 
     @Inject(method = "render", at = @At("HEAD")) // Each frame
     private void eslium$render(boolean tick, CallbackInfo ci) {
-        if (!ClienThings.shouldWork()) return;
+        if (!ClienThings.shouldWork()) {
+            if (Data.hasPendingState()) Data.clearAll();
+            return;
+        }
 
         if (
             Data.timestampNanoNextServerTick != -1 &&
@@ -92,11 +102,13 @@ public class MinecraftClientMixin {
 
             ClientPlayNetworkHandler connection = MinecraftClient.getInstance().getNetworkHandler();
 
-            for (Map.Entry<Long, Packet<?>> entry : Data.predictedPackets.entries()) {
-                Packet<?> packet = entry.getValue();
+            if (connection != null && connection.getWorld() != null) {
+                for (Map.Entry<Long, Packet<?>> entry : Data.predictedPackets.entries()) {
+                    Packet<?> packet = entry.getValue();
 
-                if (Data.extractedToBeValidedPackets.containsValue(packet)) {
-                    ((Packet<ClientPlayPacketListener>) packet).apply(connection);
+                    if (Data.extractedToBeValidedPackets.containsValue(packet)) {
+                        ((Packet<ClientPlayPacketListener>) packet).apply(connection);
+                    }
                 }
             }
             Data.predictedPackets.clear();
