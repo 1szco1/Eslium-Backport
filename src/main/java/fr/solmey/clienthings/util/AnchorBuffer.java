@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class AnchorBuffer {
     private static final Map<BlockPos, Long> interacted = new ConcurrentHashMap<>();
+    private static long nextCleanupMs = 0L;
 
     public static void addInteracted(BlockPos pos) {
         if (pos == null) return;
@@ -46,16 +47,20 @@ public class AnchorBuffer {
     }
 
     public static void cleanupExpired() {
+        long now = System.currentTimeMillis();
+        if (interacted.isEmpty() || now < nextCleanupMs) return;
+        nextCleanupMs = now + 250L;
+
         long maxTime = 3000L;
         if (JsonConfig.config != null && JsonConfig.config.anchors != null && JsonConfig.config.anchors.maxTime != null) {
             maxTime = JsonConfig.config.anchors.maxTime;
         }
-        long now = System.currentTimeMillis();
         final long limit = maxTime;
         interacted.entrySet().removeIf(entry -> (now - entry.getValue()) > limit);
     }
 
     public static void clear() {
         interacted.clear();
+        nextCleanupMs = 0L;
     }
 }

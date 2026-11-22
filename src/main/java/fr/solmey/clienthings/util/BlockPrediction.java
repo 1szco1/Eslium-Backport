@@ -48,7 +48,7 @@ public class BlockPrediction {
         if (!enabled() || pos == null || state == null) {
             return false;
         }
-        Entry entry = PREDICTIONS.get(pos);
+        Entry entry = PREDICTIONS.remove(pos);
         if (entry == null) {
             return false;
         }
@@ -56,8 +56,9 @@ public class BlockPrediction {
             entry.sampled = true;
             LatencyEstimator.sample(System.currentTimeMillis() - entry.createdMs);
         }
-        entry.serverState = state;
-        return true;
+        // Let the real packet through: the authoritative state is applied this
+        // frame instead of after a latency window, so no ghost block lingers.
+        return false;
     }
 
     public static void tick(ClientWorld world) {

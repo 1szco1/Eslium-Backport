@@ -31,7 +31,7 @@ public class SimulatedInventory {
         serverInventory.clear();
         DefaultedList<ItemStack> items = player.inventory.main;
         for (int i = 0; i < items.size(); i++) {
-            serverInventory.add(items.get(i).copy());
+            serverInventory.add(items.get(i));
         }
     }
 

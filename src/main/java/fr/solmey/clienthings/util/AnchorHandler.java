@@ -44,6 +44,10 @@ public class AnchorHandler {
         Set<BlockPos> interacted = AnchorBuffer.getInteractedPositions();
         if (interacted.isEmpty()) return;
 
+        HitResult aimed = client.crosshairTarget;
+        if (aimed instanceof BlockHitResult aimedBlock && interacted.contains(aimedBlock.getBlockPos())
+                && client.world.getBlockState(aimedBlock.getBlockPos()).isAir()) return;
+
         Vec3d cameraPos = camera.getCameraPosVec(tickDelta);
         Vec3d rotation = camera.getRotationVec(tickDelta);
         double reach = client.interactionManager != null ? client.interactionManager.getReachDistance() : 4.5;

@@ -58,6 +58,7 @@ public class MinecraftClientMixin {
         if (!ClienThings.shouldWork()) return;
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null || !(player.world instanceof ClientWorld)) return;
+        if (!Data.hasPendingState()) return;
         ClientWorld clientLevel = (ClientWorld) player.world;
 
         MixinMode.mixinMode = true;
@@ -115,6 +116,8 @@ public class MinecraftClientMixin {
 
             InteractionManager.hideEntities();
         }
+
+        if (Data.extractedToBeValidedPackets.isEmpty()) return;
 
         long MSPT = 50L;
         Iterator<Map.Entry<Long, Packet<?>>> iterator =
