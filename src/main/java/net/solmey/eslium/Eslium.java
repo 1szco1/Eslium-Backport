@@ -46,8 +46,11 @@ public class Eslium {
         ) {
             return false;
         }
-        if (ConfigManager.getConfig().enabled == false) return false;
+        // The connection keeps its own level reference; on disconnect/dimension change
+        // it can be cleared while mc.level is still set, and applying packets then NPEs.
+        if (mc.getConnection().getLevel() != mc.level) return false;
 
-        return true;
+        return ConfigManager.getConfig() != null
+                && Boolean.TRUE.equals(ConfigManager.getConfig().enabled);
     }
 }

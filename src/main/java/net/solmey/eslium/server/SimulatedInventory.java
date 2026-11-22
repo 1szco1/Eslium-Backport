@@ -11,6 +11,10 @@ public class SimulatedInventory {
     public static List<ItemStack> serverInventory = new ArrayList<>();
     private static List<ItemStack> realInventory = new ArrayList<>();
 
+    public static void reset() {
+        serverInventory.clear();
+        realInventory.clear();
+    }
 
     public static void startServerTick(Player player) {
         saveRealInventory(player);
@@ -19,8 +23,6 @@ public class SimulatedInventory {
 
     public static void endServerTick(Player player) {
         restoreRealInventory(player);
-
-        // tick ?
     }
 
     public static void saveServerInventory(Player player) {
@@ -31,8 +33,9 @@ public class SimulatedInventory {
     }
 
     private static void restoreServerInventory(Player player) {
-        for (int i = 0; i < serverInventory.size(); i++) {
-            player.getInventory().getNonEquipmentItems().set(i, serverInventory.get(i));
+        var items = player.getInventory().getNonEquipmentItems();
+        for (int i = 0; i < serverInventory.size() && i < items.size(); i++) {
+            items.set(i, serverInventory.get(i));
         }
     }
 
@@ -44,8 +47,9 @@ public class SimulatedInventory {
     }
 
     private static void restoreRealInventory(Player player) {
-        for (int i = 0; i < realInventory.size(); i++) {
-            player.getInventory().getNonEquipmentItems().set(i, realInventory.get(i));
+        var items = player.getInventory().getNonEquipmentItems();
+        for (int i = 0; i < realInventory.size() && i < items.size(); i++) {
+            items.set(i, realInventory.get(i));
         }
     }
 }

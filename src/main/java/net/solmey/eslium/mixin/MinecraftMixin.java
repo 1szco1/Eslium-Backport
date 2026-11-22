@@ -28,9 +28,13 @@ public class MinecraftMixin {
 
     @Inject(method = "tick", at = @At("HEAD")) // Start of the client tick
     private void eslium$tickHEAD(CallbackInfo callback) {
-        if (!Eslium.shouldWork()) return;
+        if (!Eslium.shouldWork()) {
+            if (Data.hasPendingState()) Data.clearAll();
+            return;
+        }
 
         LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return;
         SimulatedInventory.saveServerInventory(player);
 
         // Calculate the timestamp of the next server tick
@@ -49,7 +53,7 @@ public class MinecraftMixin {
     private void eslium$tickTAIL(CallbackInfo callback) {
         if (!Eslium.shouldWork()) return;
         LocalPlayer player = Minecraft.getInstance().player;
-        ClientLevel clientLevel = (ClientLevel) player.level();
+        if (player == null || !(player.level() instanceof ClientLevel clientLevel)) return;
 
         MixinMode.mixinMode = true;
         InteractionManager.showEntities();
@@ -81,13 +85,18 @@ public class MinecraftMixin {
 
 
         // If the real packet from the server is received before handling it, we need to rollback anyways
-        Data.extractPackets(Data.predictedPackets);
-        Data.extractedToBeValidedPackets.putAll(Data.predictedPackets);
+        if (!Data.predictedPackets.isEmpty()) {
+            Data.extractPackets(Data.predictedPackets);
+            Data.extractedToBeValidedPackets.putAll(Data.predictedPackets);
+        }
     }
 
     @Inject(method = "runTick", at = @At("HEAD")) // Each frame
     private void eslium$runTick(boolean advanceGameTime, CallbackInfo ci) {
-        if (!Eslium.shouldWork()) return;
+        if (!Eslium.shouldWork()) {
+            if (Data.hasPendingState()) Data.clearAll();
+            return;
+        }
 
         if (
             Data.timestampNanoNextServerTick != -1 &&
@@ -97,11 +106,13 @@ public class MinecraftMixin {
 
             ClientPacketListener connection = Minecraft.getInstance().getConnection();
 
-            for (var entry : Data.predictedPackets.entries()) {
-                Packet<ClientGamePacketListener> packet = entry.getValue();
+            if (connection != null && connection.getLevel() != null) {
+                for (var entry : Data.predictedPackets.entries()) {
+                    Packet<ClientGamePacketListener> packet = entry.getValue();
 
-                if(Data.extractedToBeValidedPackets.containsValue(packet)) {
-                    packet.handle(connection);
+                    if (Data.extractedToBeValidedPackets.containsValue(packet)) {
+                        packet.handle(connection);
+                    }
                 }
             }
             Data.predictedPackets.clear();

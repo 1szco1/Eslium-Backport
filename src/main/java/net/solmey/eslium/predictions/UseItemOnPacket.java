@@ -20,7 +20,9 @@ public class UseItemOnPacket {
     public static void onSentPacket(Packet<?> packet) {
         if (packet instanceof ServerboundUseItemOnPacket sPacket) {
             Player player = Minecraft.getInstance().player;
+            if (player == null) return;
             Level level = player.level();
+            if (level == null) return;
             InteractionHand hand = sPacket.getHand();
             ItemStack itemStack = player.getItemInHand(hand);
 

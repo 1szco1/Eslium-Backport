@@ -16,7 +16,7 @@ public class Rollback {
     public static void rollback(Packet<ClientGamePacketListener> packet, @Nullable Packet<ClientGamePacketListener> realPacket) {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
-        ClientLevel clientLevel = (ClientLevel) player.level();
+        if (player == null || !(player.level() instanceof ClientLevel clientLevel)) return;
 
 
         if(packet instanceof ClientboundAddEntityPacket clientboundAddEntityPacket) {

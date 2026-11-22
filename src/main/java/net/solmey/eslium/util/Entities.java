@@ -64,6 +64,10 @@ public class Entities {
         type[cursor] = entityType;
     }
 
+    public static void clearAll() {
+        for (Entity entity : entities) remove(entity);
+    }
+
     public static void clear() {
         long now = System.currentTimeMillis();
         for (int i = 0; i < 256; i++) {
@@ -106,12 +110,11 @@ public class Entities {
     public static void remove(Entity entity) {
         if (entity == null) return;
         Minecraft mc = Minecraft.getInstance();
-        if (mc == null) return;
-        LocalPlayer player = mc.player;
-        if (player == null || !(player.level() instanceof ClientLevel clientLevel)) return;
-
-        entity.discard();
-        clientLevel.removeEntity(entity.getId(), Entity.RemovalReason.DISCARDED);
+        LocalPlayer player = mc == null ? null : mc.player;
+        if (player != null && player.level() instanceof ClientLevel clientLevel) {
+            entity.discard();
+            clientLevel.removeEntity(entity.getId(), Entity.RemovalReason.DISCARDED);
+        }
 
         for (int i = 0; i < entities.length; i++) {
             if (entities[i] == entity) {

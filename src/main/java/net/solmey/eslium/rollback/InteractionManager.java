@@ -1,8 +1,10 @@
 package net.solmey.eslium.rollback;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -17,51 +19,49 @@ public class InteractionManager {
 
     private static List<Entity> anticheatBypassEntities = new ArrayList<>();
 
-    public static void showEntities() {
-        Minecraft minecraft = Minecraft.getInstance();
-        LocalPlayer player = minecraft.player;
-        ClientLevel clientLevel = (ClientLevel) player.level();
+    public static void clear() {
+        anticheatBypassEntities.clear();
+    }
 
-        List<Integer> ids = new ArrayList<>();
+    public static void showEntities() {
+        if (Data.extractedToBeValidedPackets.isEmpty() && anticheatBypassEntities.isEmpty()) return;
+
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null || !(player.level() instanceof ClientLevel clientLevel)) {
+            anticheatBypassEntities.clear();
+            return;
+        }
+
+        Set<Integer> ids = new HashSet<>();
         for (Map.Entry<Long, Packet<ClientGamePacketListener>> entry : Data.extractedToBeValidedPackets.entries()) {
             Packet<ClientGamePacketListener> packet = entry.getValue();
-
-            if (
-                packet instanceof
-                    ClientboundAddEntityPacket clientboundAddEntityPacket
-            ) {
-                ids.add(clientboundAddEntityPacket.getId());
+            if (packet instanceof ClientboundAddEntityPacket addEntityPacket) {
+                ids.add(addEntityPacket.getId());
             }
         }
 
         for (Entity entity : anticheatBypassEntities) {
-            if (ids.contains(entity.getId())) {
+            if (ids.contains(entity.getId()) && clientLevel.getEntity(entity.getId()) == null) {
                 clientLevel.addEntity(entity);
-                entity.removalReason = null; // entity.unsetRemoved();
+                entity.removalReason = null;
             }
         }
         anticheatBypassEntities.clear();
     }
 
     public static void hideEntities() {
-        Minecraft minecraft = Minecraft.getInstance();
-        LocalPlayer player = minecraft.player;
-        ClientLevel clientLevel = (ClientLevel) player.level();
+        if (Data.extractedToBeValidedPackets.isEmpty()) return;
 
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null || !(player.level() instanceof ClientLevel clientLevel)) return;
 
         for (Map.Entry<Long, Packet<ClientGamePacketListener>> entry : Data.extractedToBeValidedPackets.entries()) {
             Packet<ClientGamePacketListener> packet = entry.getValue();
-
-            if (
-                packet instanceof
-                    ClientboundAddEntityPacket clientboundAddEntityPacket
-            ) {
-                Entity entity = clientLevel.getEntity(
-                    clientboundAddEntityPacket.getId()
-                );
-                if (entity != null) {
-                     anticheatBypassEntities.add(entity);
-                     entity.remove(Entity.RemovalReason.DISCARDED);
+            if (packet instanceof ClientboundAddEntityPacket addEntityPacket) {
+                Entity entity = clientLevel.getEntity(addEntityPacket.getId());
+                if (entity != null && !anticheatBypassEntities.contains(entity)) {
+                    anticheatBypassEntities.add(entity);
+                    entity.remove(Entity.RemovalReason.DISCARDED);
                 }
             }
         }
