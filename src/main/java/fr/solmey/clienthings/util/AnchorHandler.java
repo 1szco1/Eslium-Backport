@@ -22,7 +22,8 @@ public class AnchorHandler {
     private static final int[] GLOWSTONE_OFFSETS = glowstoneOffsets();
 
     private static int[] glowstoneOffsets() {
-        int[] offsets = new int[81 * 3];
+        // 5^3 candidate positions; 93 of them fall inside the radius.
+        int[] offsets = new int[125 * 3];
         int n = 0;
         for (int dx = -2; dx <= 2; dx++) {
             for (int dy = -2; dy <= 2; dy++) {
