@@ -25,7 +25,7 @@ This mod fixes that and therefore compensates for the ping.
 
 ## Stability and performance
 
-Predicted packets and their client-side entity clones are now discarded when you leave a server, change worlds, or the mod becomes inactive, so nothing from an old connection can be replayed into a new one. Every prediction hook checks that the client world and the network handler's world are the same object before it runs, which removes the null-pointer crashes seen on disconnect and dimension changes. Inventory snapshots are size-bounded, entity lookups skip work when nothing is pending, and the config file is resolved lazily and validated on load.
+Predicted packets and their client-side entity clones are discarded when you leave a server, change worlds, or the mod becomes inactive, so nothing from an old connection can be replayed into a new one. Every prediction hook checks that the client world and the network handler's world are the same object before it runs, which removes the null-pointer crashes seen on disconnect and dimension changes. The simulated server tick is skipped entirely when no interaction is in flight, inventory snapshots reuse stack references instead of deep-copying them, ghost-anchor cleanup runs four times a second, and targeting stops re-raycasting once a ghost anchor is already aimed at. Authoritative block updates are applied as soon as they arrive instead of after a latency window, so a placement corrects itself in the same frame rather than lingering as a ghost block.
 
 ## Credits
 
