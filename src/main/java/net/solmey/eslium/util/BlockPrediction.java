@@ -49,7 +49,7 @@ public class BlockPrediction {
         if (!enabled() || pos == null || state == null) {
             return;
         }
-        Entry entry = PREDICTIONS.get(pos);
+        Entry entry = PREDICTIONS.remove(pos);
         if (entry == null) {
             return;
         }
@@ -57,7 +57,8 @@ public class BlockPrediction {
             entry.sampled = true;
             LatencyEstimator.sample(System.currentTimeMillis() - entry.createdMs);
         }
-        entry.serverState = state;
+        // Vanilla applies the authoritative packet this frame; the deferred
+        // replay is no longer needed and would only re-introduce ghost blocks.
     }
 
     public static void tick(ClientLevel world) {

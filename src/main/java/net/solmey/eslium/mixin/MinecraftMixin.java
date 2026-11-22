@@ -54,6 +54,7 @@ public class MinecraftMixin {
         if (!Eslium.shouldWork()) return;
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null || !(player.level() instanceof ClientLevel clientLevel)) return;
+        if (!Data.hasPendingState()) return;
 
         MixinMode.mixinMode = true;
         InteractionManager.showEntities();

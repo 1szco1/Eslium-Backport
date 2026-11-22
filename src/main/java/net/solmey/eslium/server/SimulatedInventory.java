@@ -28,7 +28,7 @@ public class SimulatedInventory {
     public static void saveServerInventory(Player player) {
         serverInventory.clear();
         for (ItemStack itemStack : player.getInventory().getNonEquipmentItems()) {
-            serverInventory.add(itemStack.copy());
+            serverInventory.add(itemStack);
         }
     }
 
