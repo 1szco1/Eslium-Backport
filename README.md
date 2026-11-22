@@ -1,5 +1,7 @@
 <center>
 
+![Eslium banner](https://raw.githubusercontent.com/1szco1/Eslium-Backport/main/banner.png)
+
 # Eslium
 
 [![Modrinth Icon](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy-minimal/available/modrinth_vector.svg)](https://modrinth.com/project/zaVwh7an)
