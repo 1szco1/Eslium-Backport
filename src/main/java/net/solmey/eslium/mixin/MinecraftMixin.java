@@ -14,6 +14,7 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.solmey.eslium.Eslium;
 import net.solmey.eslium.config.ConfigManager;
 import net.solmey.eslium.data.Data;
@@ -110,6 +111,10 @@ public class MinecraftMixin {
             if (connection != null && connection.getLevel() != null) {
                 for (var entry : Data.predictedPackets.entries()) {
                     Packet<ClientGamePacketListener> packet = entry.getValue();
+
+                    // Replaying a spawn duplicates the predicted entity; the
+                    // authoritative packet has already replaced it (or will).
+                    if (packet instanceof ClientboundAddEntityPacket) continue;
 
                     if (Data.extractedToBeValidedPackets.containsValue(packet)) {
                         packet.handle(connection);

@@ -26,6 +26,30 @@ import net.solmey.eslium.config.ConfigManager;
 
 public class AnchorHandler {
 
+    // Precomputed once: the blast radius is constant (Paulem79/Oushii's
+    // "visit each block at most once" idea, applied to the glowstone sweep).
+    private static final int[] GLOWSTONE_OFFSETS = glowstoneOffsets();
+
+    private static int[] glowstoneOffsets() {
+        int[] offsets = new int[81 * 3];
+        int n = 0;
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dy = -2; dy <= 2; dy++) {
+                for (int dz = -2; dz <= 2; dz++) {
+                    if (dx * dx + dy * dy + dz * dz <= 8) {
+                        offsets[n++] = dx;
+                        offsets[n++] = dy;
+                        offsets[n++] = dz;
+                    }
+                }
+            }
+        }
+        int[] exact = new int[n];
+        System.arraycopy(offsets, 0, exact, 0, n);
+        return exact;
+    }
+
+
     public static void handleAnchorDetonation(Minecraft client, Level level, BlockPos pos, BlockHitResult hit) {
         if (level == null || pos == null) return;
 
@@ -34,7 +58,10 @@ public class AnchorHandler {
 
         if (ConfigManager.getConfig() != null && ConfigManager.getConfig().anchors != null
                 && ConfigManager.getConfig().anchors.clientExplosion) {
-            destroyAdjacentGlowstone(level, pos);
+            // Walksy/AnchorOptimizer: don't fake an explosion through an entity.
+            if (level.getEntities(null, new AABB(pos)).isEmpty()) {
+                destroyAdjacentGlowstone(level, pos);
+            }
         }
     }
 
@@ -109,16 +136,10 @@ public class AnchorHandler {
 
     public static void destroyAdjacentGlowstone(Level level, BlockPos center) {
         if (level == null || center == null) return;
-        for (int dx = -2; dx <= 2; dx++) {
-            for (int dy = -2; dy <= 2; dy++) {
-                for (int dz = -2; dz <= 2; dz++) {
-                    if (dx * dx + dy * dy + dz * dz <= 8) {
-                        BlockPos p = center.offset(dx, dy, dz);
-                        if (level.getBlockState(p).getBlock() == Blocks.GLOWSTONE) {
-                            level.setBlock(p, Blocks.AIR.defaultBlockState(), 3);
-                        }
-                    }
-                }
+        for (int i = 0; i < GLOWSTONE_OFFSETS.length; i += 3) {
+            BlockPos p = center.offset(GLOWSTONE_OFFSETS[i], GLOWSTONE_OFFSETS[i + 1], GLOWSTONE_OFFSETS[i + 2]);
+            if (level.getBlockState(p).getBlock() == Blocks.GLOWSTONE) {
+                level.setBlock(p, Blocks.AIR.defaultBlockState(), 3);
             }
         }
     }
