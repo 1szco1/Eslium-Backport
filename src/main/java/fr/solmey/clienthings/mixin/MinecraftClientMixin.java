@@ -22,6 +22,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
@@ -106,6 +107,10 @@ public class MinecraftClientMixin {
             if (connection != null && connection.getWorld() != null) {
                 for (Map.Entry<Long, Packet<?>> entry : Data.predictedPackets.entries()) {
                     Packet<?> packet = entry.getValue();
+
+                    // Replaying a spawn duplicates the predicted entity; the
+                    // authoritative packet has already replaced it (or will).
+                    if (packet instanceof EntitySpawnS2CPacket) continue;
 
                     if (Data.extractedToBeValidedPackets.containsValue(packet)) {
                         ((Packet<ClientPlayPacketListener>) packet).apply(connection);

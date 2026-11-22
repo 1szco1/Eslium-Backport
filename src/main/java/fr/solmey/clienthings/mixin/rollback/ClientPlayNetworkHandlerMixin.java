@@ -29,32 +29,39 @@ public class ClientPlayNetworkHandlerMixin {
         if (Data.extractedToBeValidedPackets.containsValue(packet))
             return;
 
-        Iterator<Map.Entry<Long, Packet<?>>> iterator =
-                Data.extractedToBeValidedPackets.entries().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<Long, Packet<?>> entry = iterator.next();
+        // A 1.16.5 client on a translated 1.21.11 server gets authoritative
+        // packets whose coordinates and entity data differ from the prediction.
+        // Match by type and proximity instead of exact field equality, otherwise
+        // the predicted spawn is re-applied later as a duplicate (ghost) entity.
+        Long bestKey = null;
+        Packet<?> bestValue = null;
+        EntitySpawnS2CPacket bestPacket = null;
+        double bestDistanceSq = 4.0D * 4.0D;
+
+        for (Map.Entry<Long, Packet<?>> entry : Data.extractedToBeValidedPackets.entries()) {
             Packet<?> packetToCheck = entry.getValue();
+            if (!(packetToCheck instanceof EntitySpawnS2CPacket)) continue;
 
-            if (packetToCheck instanceof EntitySpawnS2CPacket) {
-                EntitySpawnS2CPacket cPacket = (EntitySpawnS2CPacket) packetToCheck;
+            EntitySpawnS2CPacket cPacket = (EntitySpawnS2CPacket) packetToCheck;
+            if (packet.getEntityTypeId() != cPacket.getEntityTypeId()) continue;
 
-                if (
-                    packet.getEntityTypeId() == cPacket.getEntityTypeId() &&
-                    packet.getX() == cPacket.getX() &&
-                    packet.getY() == cPacket.getY() &&
-                    packet.getZ() == cPacket.getZ() &&
-                    packet.getPitch() == cPacket.getPitch() &&
-                    packet.getYaw() == cPacket.getYaw() &&
-                    packet.getEntityData() == cPacket.getEntityData()
-                ) {
-                    InteractionManager.showEntities();
-                    Rollback.rollback(cPacket, packet);
-                    InteractionManager.hideEntities();
-
-                    iterator.remove();
-                    return;
-                }
+            double dx = packet.getX() - cPacket.getX();
+            double dy = packet.getY() - cPacket.getY();
+            double dz = packet.getZ() - cPacket.getZ();
+            double distanceSq = dx * dx + dy * dy + dz * dz;
+            if (distanceSq < bestDistanceSq) {
+                bestDistanceSq = distanceSq;
+                bestKey = entry.getKey();
+                bestValue = entry.getValue();
+                bestPacket = cPacket;
             }
+        }
+
+        if (bestPacket != null) {
+            InteractionManager.showEntities();
+            Rollback.rollback(bestPacket, packet);
+            InteractionManager.hideEntities();
+            Data.extractedToBeValidedPackets.remove(bestKey, bestValue);
         }
     }
 }

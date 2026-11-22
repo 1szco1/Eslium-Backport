@@ -23,11 +23,25 @@ For example, if you want to use a Crystal, you must wait for the server validati
 This mod fixes that and therefore compensates for the ping.
 
 
+## Cross-version ghosting
+
+Predicted spawns are matched to authoritative packets by entity type and proximity rather than by exact coordinates and metadata, so a translated connection (for example a 1.16.5 client on a 1.21.11 server) retires its fake throwable instead of leaving a duplicate behind. Predicted spawn packets are never replayed, which also prevents ghost entities when the server changes the spawn data.
+
 ## Stability and performance
 
 Predicted packets and their client-side entity clones are discarded when you leave a server, change worlds, or the mod becomes inactive, so nothing from an old connection can be replayed into a new one. Every prediction hook checks that the client world and the network handler's world are the same object before it runs, which removes the null-pointer crashes seen on disconnect and dimension changes. The simulated server tick is skipped entirely when no interaction is in flight, inventory snapshots reuse stack references instead of deep-copying them, ghost-anchor cleanup runs four times a second, and targeting stops re-raycasting once a ghost anchor is already aimed at. Authoritative block updates are applied as soon as they arrive instead of after a latency window, so a placement corrects itself in the same frame rather than lingering as a ghost block.
 
 ## Credits
+
+### Anchor and explosion optimization references
+
+The anchor path borrows ideas from these projects; thanks to their authors:
+
+- [Anchor Optimizer by Walksy](https://github.com/Walksy/AnchorOptimizer) (MIT) — skip the client-side explosion when an entity occupies the anchor block; that check is used here. Its duplicate-sound suppression was not adopted.
+- [Heros Anchor Optimizer by HerobaneNair](https://github.com/HerobaneNair/herosanchoroptimizer) (MIT) — ghost-anchor rendering reference; Eslium already had its own ghost anchors, so no code was taken.
+- [Oushii by Paulem79](https://modrinth.com/project/n38thv95) (GPL-3.0-or-later) — precomputed blast-offsets idea; the glowstone sweep now uses a static offset table instead of recomputing the radius on every detonation.
+- [Anchor-Optimizer by cutebow](https://github.com/cutebow/Anchor-Optimizer) — reference only; its source is all-rights-reserved, so no code was taken.
+
 
 - **Original mod:** [Eslium on Modrinth](https://modrinth.com/project/zaVwh7an) by [@Solmeye](https://github.com/Solmeye)
 - **Backport:** [@1szco1](https://github.com/1szco1)

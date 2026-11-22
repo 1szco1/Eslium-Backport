@@ -17,6 +17,30 @@ import java.util.Set;
 
 public class AnchorHandler {
 
+    // Precomputed once: the blast radius is constant (Paulem79/Oushii's
+    // "visit each block at most once" idea, applied to the glowstone sweep).
+    private static final int[] GLOWSTONE_OFFSETS = glowstoneOffsets();
+
+    private static int[] glowstoneOffsets() {
+        int[] offsets = new int[81 * 3];
+        int n = 0;
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dy = -2; dy <= 2; dy++) {
+                for (int dz = -2; dz <= 2; dz++) {
+                    if (dx * dx + dy * dy + dz * dz <= 8) {
+                        offsets[n++] = dx;
+                        offsets[n++] = dy;
+                        offsets[n++] = dz;
+                    }
+                }
+            }
+        }
+        int[] exact = new int[n];
+        System.arraycopy(offsets, 0, exact, 0, n);
+        return exact;
+    }
+
+
     public static void handleAnchorDetonation(MinecraftClient client, World world, BlockPos pos, BlockHitResult hit) {
         if (world == null || pos == null) return;
 
@@ -28,7 +52,10 @@ public class AnchorHandler {
 
         // 3. Clear adjacent glowstone blocks to prevent placement blockage (Walksy optimization)
         if (JsonConfig.config != null && JsonConfig.config.anchors != null && Boolean.TRUE.equals(JsonConfig.config.anchors.clientExplosion)) {
-            destroyAdjacentGlowstone(world, pos);
+            // Walksy/AnchorOptimizer: don't fake an explosion through an entity.
+            if (world.getEntitiesByClass(Entity.class, new Box(pos), entity -> true).isEmpty()) {
+                destroyAdjacentGlowstone(world, pos);
+            }
         }
     }
 
@@ -45,8 +72,9 @@ public class AnchorHandler {
         if (interacted.isEmpty()) return;
 
         HitResult aimed = client.crosshairTarget;
-        if (aimed instanceof BlockHitResult aimedBlock && interacted.contains(aimedBlock.getBlockPos())
-                && client.world.getBlockState(aimedBlock.getBlockPos()).isAir()) return;
+        if (aimed != null && aimed.getType() == HitResult.Type.BLOCK
+                && interacted.contains(((BlockHitResult) aimed).getBlockPos())
+                && client.world.getBlockState(((BlockHitResult) aimed).getBlockPos()).isAir()) return;
 
         Vec3d cameraPos = camera.getCameraPosVec(tickDelta);
         Vec3d rotation = camera.getRotationVec(tickDelta);
@@ -98,16 +126,10 @@ public class AnchorHandler {
 
     public static void destroyAdjacentGlowstone(World world, BlockPos center) {
         if (world == null || center == null) return;
-        for (int dx = -2; dx <= 2; dx++) {
-            for (int dy = -2; dy <= 2; dy++) {
-                for (int dz = -2; dz <= 2; dz++) {
-                    if (dx * dx + dy * dy + dz * dz <= 8) {
-                        BlockPos p = center.add(dx, dy, dz);
-                        if (world.getBlockState(p).getBlock() == Blocks.GLOWSTONE) {
-                            world.setBlockState(p, Blocks.AIR.getDefaultState(), 3);
-                        }
-                    }
-                }
+        for (int i = 0; i < GLOWSTONE_OFFSETS.length; i += 3) {
+            BlockPos p = center.add(GLOWSTONE_OFFSETS[i], GLOWSTONE_OFFSETS[i + 1], GLOWSTONE_OFFSETS[i + 2]);
+            if (world.getBlockState(p).getBlock() == Blocks.GLOWSTONE) {
+                world.setBlockState(p, Blocks.AIR.getDefaultState(), 3);
             }
         }
     }
