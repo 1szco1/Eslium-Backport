@@ -95,9 +95,7 @@ public final class ConfigGui {
                     () -> config.redstone.maxTime, v -> config.redstone.maxTime = v,
                     () -> config.redstone.maxDistance, v -> config.redstone.maxDistance = v))
             .addNav("Anchors", () -> config.anchors.enabled, v -> config.anchors.enabled = v,
-                () -> anchors(main, config))
-            .addNav("Placement", () -> config.placement.enabled, v -> config.placement.enabled = v,
-                () -> placement(main, config));
+                () -> anchors(main, config));
 
         return main;
     }
@@ -144,17 +142,6 @@ public final class ConfigGui {
         screen.addToggle("Client explosion", () -> config.anchors.clientExplosion, v -> config.anchors.clientExplosion = v);
         screen.addToggle("Re-interact", () -> config.anchors.reInteract, v -> config.anchors.reInteract = v);
         screen.addToggle("Ghost anchor", () -> config.anchors.ghostAnchor, v -> config.anchors.ghostAnchor = v);
-        return screen;
-    }
-
-    private static OptionsScreen placement(OptionsScreen parent, Config config) {
-        OptionsScreen screen = new OptionsScreen(Component.literal("Placement"), parent);
-        screen.addToggle("Enabled", () -> config.placement.enabled, v -> config.placement.enabled = v);
-        addServers(screen, config.placement.servers);
-        screen.addToggle("Dynamic window", () -> config.placement.dynamic, v -> config.placement.dynamic = v);
-        screen.addInt("Fixed window (ms)", () -> config.placement.fixedWindowMs, v -> config.placement.fixedWindowMs = v, 0, 5000);
-        screen.addInt("Floor (ms)", () -> config.placement.floorMs, v -> config.placement.floorMs = v, 0, 1000);
-        screen.addInt("Cap (ms)", () -> config.placement.capMs, v -> config.placement.capMs = v, 0, 5000);
         return screen;
     }
 

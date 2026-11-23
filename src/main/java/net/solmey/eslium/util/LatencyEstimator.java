@@ -2,8 +2,6 @@ package net.solmey.eslium.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
-import net.solmey.eslium.config.ConfigManager;
-import net.solmey.eslium.config.Placement;
 
 public class LatencyEstimator {
 
@@ -41,14 +39,6 @@ public class LatencyEstimator {
     public static long estimateMs(int min, int max) {
         long value = estimateRawMs();
         return Math.max(min, Math.min(max, value));
-    }
-
-    public static long placementWindowMs() {
-        Placement placement = ConfigManager.getConfig() == null ? null : ConfigManager.getConfig().placement;
-        if (placement == null || !placement.dynamic) {
-            return placement == null ? 1000L : placement.fixedWindowMs;
-        }
-        return estimateMs(placement.floorMs, placement.capMs);
     }
 
     public static synchronized void reset() {

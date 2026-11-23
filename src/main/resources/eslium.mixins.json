@@ -54,8 +54,6 @@
     "placeables.SignItemMixin",
     "placeables.SpawnEggItemMixin",
 
-    "placement.BlockItemMixin",
-
     "pose.ClientPlayNetworkHandlerMixin",
 
     "redstone.ComparatorBlockMixin",

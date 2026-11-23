@@ -22,7 +22,6 @@ import net.solmey.eslium.data.Data;
 import net.solmey.eslium.rollback.InteractionManager;
 import net.solmey.eslium.rollback.Rollback;
 import net.solmey.eslium.util.AnchorBuffer;
-import net.solmey.eslium.util.BlockPrediction;
 
 @Mixin(ClientPacketListener.class)
 public class ClientPacketListenerMixin {
@@ -45,7 +44,6 @@ public class ClientPacketListenerMixin {
     private void eslium$handleBlockUpdate(ClientboundBlockUpdatePacket packet, CallbackInfo ci) {
         if (packet != null) {
             AnchorBuffer.removeInteracted(packet.getPos());
-            BlockPrediction.absorb(packet.getPos(), packet.getBlockState());
         }
     }
 

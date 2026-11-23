@@ -11,7 +11,6 @@ import net.minecraft.resources.Identifier;
 import net.solmey.eslium.config.ConfigManager;
 import net.solmey.eslium.config.gui.ConfigGui;
 import net.solmey.eslium.util.AnchorHandler;
-import net.solmey.eslium.util.BlockPrediction;
 import net.solmey.eslium.util.CrystalHandler;
 import net.solmey.eslium.util.Entities;
 
@@ -38,7 +37,6 @@ public class EsliumClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             Entities.clear();
             CrystalHandler.tick();
-            BlockPrediction.tick(client.level);
 
             while (openConfigKey.consumeClick()) {
                 client.setScreen(ConfigGui.create(client.screen));

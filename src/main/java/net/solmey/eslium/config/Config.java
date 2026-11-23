@@ -28,5 +28,4 @@ public class Config {
     public Combat combat = new Combat();
     public Redstone redstone = new Redstone();
     public Anchors anchors = new Anchors();
-    public Placement placement = new Placement();
 }

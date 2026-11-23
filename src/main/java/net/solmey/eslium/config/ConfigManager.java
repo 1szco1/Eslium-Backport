@@ -68,13 +68,11 @@ public class ConfigManager {
         if (config.combat == null) config.combat = new Combat();
         if (config.redstone == null) config.redstone = new Redstone();
         if (config.anchors == null) config.anchors = new Anchors();
-        if (config.placement == null) config.placement = new Placement();
 
         if (config.crystals.servers == null) config.crystals.servers = new Servers();
         if (config.crystals.autoDestroy == null) config.crystals.autoDestroy = new AutoDestroy();
         if (config.minecart.servers == null) config.minecart.servers = new Servers();
         if (config.anchors.servers == null) config.anchors.servers = new Servers();
-        if (config.placement.servers == null) config.placement.servers = new Servers();
         if (config.consumables.servers == null) config.consumables.servers = new Servers();
         if (config.cooldowns.servers == null) config.cooldowns.servers = new Servers();
         if (config.elytras.servers == null) config.elytras.servers = new Servers();
