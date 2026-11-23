@@ -57,7 +57,6 @@ public class JsonConfig {
         if (config.combat == null) config.combat = new Combat();
         if (config.redstone == null) config.redstone = new Redstone();
         if (config.anchors == null) config.anchors = new Anchors();
-        if (config.placement == null) config.placement = new Placement();
         if (config.crystals.autoDestroy == null) config.crystals.autoDestroy = new AutoDestroy();
         if (config.consumables.servers == null) config.consumables.servers = new Servers();
         if (config.cooldowns.servers == null) config.cooldowns.servers = new Servers();
@@ -76,7 +75,6 @@ public class JsonConfig {
         if (config.combat.servers == null) config.combat.servers = new Servers();
         if (config.redstone.servers == null) config.redstone.servers = new Servers();
         if (config.anchors.servers == null) config.anchors.servers = new Servers();
-        if (config.placement.servers == null) config.placement.servers = new Servers();
         if (config.enabled == null) config.enabled = true;
         if (config.optout == null) config.optout = false;
         if (config.debug == null) config.debug = false;

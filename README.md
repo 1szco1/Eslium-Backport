@@ -29,7 +29,7 @@ Predicted spawns are matched to authoritative packets by entity type and proximi
 
 ## Stability and performance
 
-Predicted packets and their client-side entity clones are discarded when you leave a server, change worlds, or the mod becomes inactive, so nothing from an old connection can be replayed into a new one. Every prediction hook checks that the client world and the network handler's world are the same object before it runs, which removes the null-pointer crashes seen on disconnect and dimension changes. The simulated server tick is skipped entirely when no interaction is in flight, inventory snapshots reuse stack references instead of deep-copying them, ghost-anchor cleanup runs four times a second, and targeting stops re-raycasting once a ghost anchor is already aimed at. Authoritative block updates are applied as soon as they arrive instead of after a latency window, so a placement corrects itself in the same frame rather than lingering as a ghost block.
+Predicted packets and their client-side entity clones are discarded when you leave a server, change worlds, or the mod becomes inactive, so nothing from an old connection can be replayed into a new one. Every prediction hook checks that the client world and the network handler's world are the same object before it runs, which removes the null-pointer crashes seen on disconnect and dimension changes. The simulated server tick is skipped entirely when no interaction is in flight, inventory snapshots reuse stack references instead of deep-copying them, ghost-anchor cleanup runs four times a second, and targeting stops re-raycasting once a ghost anchor is already aimed at.
 
 ## Credits
 
@@ -143,14 +143,6 @@ Every prediction section shares the same base options:
     "clientExplosion": true,
     "reInteract": true,
     "ghostAnchor": true
-  },
-  "placement": {
-    "enabled": true,
-    "servers": { "CUSTOM": true, "MODDED": true, "PLUGIN": true, "VANILLA": true },
-    "dynamic": true,
-    "fixedWindowMs": 1000,
-    "floorMs": 50,
-    "capMs": 300
   }
 }
 ```
@@ -173,7 +165,7 @@ Every prediction section shares the same base options:
 
 **Sections**
 
-All sections below share `enabled`, `servers`, and (where shown) `maxTime` / `maxDistance`: `consumables`, `cooldowns`, `crystals`, `elytras`, `firework`, `minecart`, `pose`, `swap`, `weapons`, `windcharge`, `throwables`, `placeables`, `interactables`, `tools`, `combat`, `redstone`, `anchors`, `placement`.
+All sections below share `enabled`, `servers`, and (where shown) `maxTime` / `maxDistance`: `consumables`, `cooldowns`, `crystals`, `elytras`, `firework`, `minecart`, `pose`, `swap`, `weapons`, `windcharge`, `throwables`, `placeables`, `interactables`, `tools`, `combat`, `redstone`, `anchors`.
 
 - `crystals`
   - `delay` - fixed delay in ms before a hit crystal is hidden when `dynamicDelay` is off (0-200)
@@ -187,11 +179,6 @@ All sections below share `enabled`, `servers`, and (where shown) `maxTime` / `ma
   - `clientExplosion` - show the detonation explosion client-side
   - `reInteract` - allow re-interacting with the anchor before the server confirms
   - `ghostAnchor` - hide a stale (ghost) anchor block
-
-- `placement` - fixes block-placement "ghosting" (a placed block briefly reverting to its old state)
-  - `dynamic` - derive the settle window automatically from your measured latency
-  - `fixedWindowMs` - window used when `dynamic` is false
-  - `floorMs` / `capMs` - lower/upper bounds for the dynamic window
 
 </details>
 

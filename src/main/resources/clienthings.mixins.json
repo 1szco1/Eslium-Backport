@@ -55,7 +55,6 @@
     "placeables.ArmorStandItemMixin",
     "placeables.ItemFrameItemMixin",
     "placeables.SignItemMixin",
-    "placement.BlockItemMixin",
     "interactables.BedBlockMixin",
     "interactables.RespawnAnchorBlockMixin",
     "interactables.TntBlockMixin",

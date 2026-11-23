@@ -1,7 +1,6 @@
 package fr.solmey.clienthings.mixin.system;
 
 import fr.solmey.clienthings.util.AnchorBuffer;
-import fr.solmey.clienthings.util.BlockPrediction;
 import fr.solmey.clienthings.util.Entities;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -26,13 +25,10 @@ public class ClientPlayNetworkHandlerMixin {
         }
     }
 
-    @Inject(method = "onBlockUpdate", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "onBlockUpdate", at = @At("HEAD"))
     private void onBlockUpdate(BlockUpdateS2CPacket packet, CallbackInfo ci) {
         if (packet != null && packet.getPos() != null) {
             AnchorBuffer.removeInteracted(packet.getPos());
-            if (BlockPrediction.absorb(packet.getPos(), packet.getState())) {
-                ci.cancel();
-            }
         }
     }
 

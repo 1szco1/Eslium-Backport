@@ -1,6 +1,5 @@
 package fr.solmey.clienthings.util;
 
-import fr.solmey.clienthings.config.JsonConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
 
@@ -39,18 +38,6 @@ public class LatencyEstimator {
     public static long estimateMs(int min, int max) {
         long value = estimateRawMs();
         return Math.max(min, Math.min(max, value));
-    }
-
-    public static long placementWindowMs() {
-        if (JsonConfig.config == null || JsonConfig.config.placement == null
-                || !Boolean.TRUE.equals(JsonConfig.config.placement.dynamic)) {
-            Integer fixed = JsonConfig.config == null || JsonConfig.config.placement == null
-                    ? null : JsonConfig.config.placement.fixedWindowMs;
-            return fixed == null ? 1000L : fixed;
-        }
-        Integer floor = JsonConfig.config.placement.floorMs;
-        Integer cap = JsonConfig.config.placement.capMs;
-        return estimateMs(floor == null ? 50 : floor, cap == null ? 300 : cap);
     }
 
     public static synchronized void reset() {
