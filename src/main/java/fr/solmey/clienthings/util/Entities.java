@@ -5,9 +5,15 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EyeOfEnderEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.entity.projectile.TridentEntity;
+import net.minecraft.entity.projectile.thrown.EggEntity;
+import net.minecraft.entity.projectile.thrown.EnderPearlEntity;
+import net.minecraft.entity.projectile.thrown.ExperienceBottleEntity;
+import net.minecraft.entity.projectile.thrown.PotionEntity;
+import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.network.packet.s2c.play.EntityS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
@@ -31,6 +37,15 @@ public class Entities {
     public static final int FIREWORK = 1;
     public static final int WEAPONS = 2;
     public static final int WINDCHARGE = 3;
+
+    private static boolean isThrowable(Entity entity) {
+        return entity instanceof EggEntity
+                || entity instanceof EnderPearlEntity
+                || entity instanceof ExperienceBottleEntity
+                || entity instanceof EyeOfEnderEntity
+                || entity instanceof PotionEntity
+                || entity instanceof SnowballEntity;
+    }
 
     public static int getNextFakeId() {
         return fakeIdCounter++;
@@ -89,6 +104,11 @@ public class Entities {
                 } else if (entities[i] instanceof AbstractMinecartEntity) {
                     if (JsonConfig.config != null && JsonConfig.config.minecart != null && JsonConfig.config.minecart.maxTime != null) {
                         maxTime = JsonConfig.config.minecart.maxTime;
+                    }
+                    shouldRemove = (now - timestamps[i] >= maxTime) && timestamps[i] != 0;
+                } else if (isThrowable(entities[i])) {
+                    if (JsonConfig.config != null && JsonConfig.config.throwables != null && JsonConfig.config.throwables.maxTime != null) {
+                        maxTime = JsonConfig.config.throwables.maxTime;
                     }
                     shouldRemove = (now - timestamps[i] >= maxTime) && timestamps[i] != 0;
                 } else {
@@ -158,21 +178,30 @@ public class Entities {
         double bestDistance = Double.MAX_VALUE;
 
         for (int i = 0; i < 256; i++) {
-            if (initialEntities[i] != null && type[i] == FAKE) {
-                double dx = packet.getX() - initialEntities[i].getX();
-                double dy = packet.getY() - initialEntities[i].getY();
-                double dz = packet.getZ() - initialEntities[i].getZ();
-                double dist = dx * dx + dy * dy + dz * dz;
+            if (initialEntities[i] == null || type[i] != FAKE) continue;
 
-                if (dist < bestDistance) {
-                    bestDistance = dist;
-                    cursorFake = i;
-                    needed = true;
-                }
+            Entity fake = initialEntities[i];
+            if (packet.getEntityTypeId() != fake.getType()) continue;
+
+            double maxDistance = 16.0D;
+            if (isThrowable(fake) && JsonConfig.config != null && JsonConfig.config.throwables != null
+                    && JsonConfig.config.throwables.maxDistance != null) {
+                maxDistance = JsonConfig.config.throwables.maxDistance;
+            }
+
+            double dx = packet.getX() - fake.getX();
+            double dy = packet.getY() - fake.getY();
+            double dz = packet.getZ() - fake.getZ();
+            double dist = dx * dx + dy * dy + dz * dz;
+
+            if (dist <= maxDistance * maxDistance && dist < bestDistance) {
+                bestDistance = dist;
+                cursorFake = i;
+                needed = true;
             }
         }
 
-        if (needed && bestDistance <= 16.0D) {
+        if (needed) {
             if (JsonConfig.config != null && JsonConfig.config.debug) {
                 System.out.println("[Eslium] Matched fake entity, removing it. Distance: " + Math.sqrt(bestDistance));
             }
