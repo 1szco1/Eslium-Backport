@@ -41,6 +41,7 @@ The anchor path borrows ideas from these projects; thanks to their authors:
 - [Heros Anchor Optimizer by HerobaneNair](https://github.com/HerobaneNair/herosanchoroptimizer) (MIT) — ghost-anchor rendering reference; Eslium already had its own ghost anchors, so no code was taken.
 - [Oushii by Paulem79](https://modrinth.com/project/n38thv95) (GPL-3.0-or-later) — precomputed blast-offsets idea; the glowstone sweep now uses a static offset table instead of recomputing the radius on every detonation.
 - [Anchor-Optimizer by cutebow](https://github.com/cutebow/Anchor-Optimizer) — reference only; its source is all-rights-reserved, so no code was taken.
+- [Better Hitreg by jasspir](https://github.com/jasspir/BetterHitreg) (Apache-2.0) - appearance-only client feedback reference; no packet or server logic was copied.
 
 
 - **Original mod:** [Eslium on Modrinth](https://modrinth.com/project/zaVwh7an) by [@Solmeye](https://github.com/Solmeye)
@@ -62,25 +63,15 @@ When using an end crystal on obisidian or bedrock, the spawn of the end crystal 
 
 </details>
 
-## Predictions Added so far:
-- Consumables
-- Cooldowns
-- Crystals
-- Elytras
-- Firework
-- Minecart
-- Pose
-- Swap
-- Weapons
-- Windcharge
-- Throwables
-- Placeables
-- Interactables
-- Tools
-- Combat
-- Redstone
-- Anchors
-- Placement
+## Prediction coverage
+
+Added in both builds: Anchors, Consumables, Crossbow, Ender Pearls, Firework rocket, Fishing Rod, Item frame, Armor Stand, Potion Effects, Potions, Snowball, Spawn Eggs, Trident, Egg, Bottle o' Enchanting.
+
+Added in 1.16.5 only: Bed.
+
+Added in 1.21.11 only: Wind charge.
+
+Not added: Cooldowns, Dyes, Jukebox, Note block, Lunge enchant, Cushion, Pickup entities, Pick Block, Cactus damage, Lead, Boat, Interfaces, Void damage, Game mode change, Tchat, Crafting, Scaffolding, Knockback, Fall damage, Elytra, Swap, Entity pose, Inventory, Weapons, Experience, Sounds.
 
 
 ## Configuration

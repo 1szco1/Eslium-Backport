@@ -15,6 +15,7 @@ import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEnder
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownExperienceBottle;
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownLingeringPotion;
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownSplashPotion;
+import net.minecraft.world.entity.projectile.hurtingprojectile.windcharge.WindCharge;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.solmey.eslium.config.ConfigManager;
 
@@ -45,6 +46,10 @@ public class Entities {
                 || entity instanceof EyeOfEnder
                 || entity instanceof ThrownLingeringPotion
                 || entity instanceof ThrownSplashPotion;
+    }
+
+    private static boolean isWindCharge(Entity entity) {
+        return entity instanceof WindCharge;
     }
 
     public static int getNextFakeId() {
@@ -114,6 +119,11 @@ public class Entities {
                 } else if (isThrowable(entities[i])) {
                     if (ConfigManager.getConfig() != null && ConfigManager.getConfig().throwables != null) {
                         maxTime = ConfigManager.getConfig().throwables.maxTime;
+                    }
+                    shouldRemove = (now - timestamps[i] >= maxTime) && timestamps[i] != 0;
+                } else if (isWindCharge(entities[i])) {
+                    if (ConfigManager.getConfig() != null && ConfigManager.getConfig().windcharge != null) {
+                        maxTime = ConfigManager.getConfig().windcharge.maxTime;
                     }
                     shouldRemove = (now - timestamps[i] >= maxTime) && timestamps[i] != 0;
                 } else {
@@ -191,6 +201,9 @@ public class Entities {
             if (isThrowable(fake) && ConfigManager.getConfig() != null
                     && ConfigManager.getConfig().throwables != null) {
                 maxDistance = ConfigManager.getConfig().throwables.maxDistance;
+            } else if (isWindCharge(fake) && ConfigManager.getConfig() != null
+                    && ConfigManager.getConfig().windcharge != null) {
+                maxDistance = ConfigManager.getConfig().windcharge.maxDistance;
             }
 
             double dx = packet.getX() - fake.getX();
