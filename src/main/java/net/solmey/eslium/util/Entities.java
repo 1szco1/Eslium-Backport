@@ -7,8 +7,14 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
+import net.minecraft.world.entity.projectile.EyeOfEnder;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEgg;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEnderpearl;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownExperienceBottle;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownLingeringPotion;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownSplashPotion;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.solmey.eslium.config.ConfigManager;
 
@@ -31,6 +37,15 @@ public class Entities {
     public static final int FIREWORK = 1;
     public static final int WEAPONS = 2;
     public static final int WINDCHARGE = 3;
+
+    private static boolean isThrowable(Entity entity) {
+        return entity instanceof ThrownEgg
+                || entity instanceof ThrownEnderpearl
+                || entity instanceof ThrownExperienceBottle
+                || entity instanceof EyeOfEnder
+                || entity instanceof ThrownLingeringPotion
+                || entity instanceof ThrownSplashPotion;
+    }
 
     public static int getNextFakeId() {
         return fakeIdCounter++;
@@ -94,6 +109,11 @@ public class Entities {
                 } else if (entities[i] instanceof AbstractMinecart) {
                     if (ConfigManager.getConfig() != null && ConfigManager.getConfig().minecart != null) {
                         maxTime = ConfigManager.getConfig().minecart.maxTime;
+                    }
+                    shouldRemove = (now - timestamps[i] >= maxTime) && timestamps[i] != 0;
+                } else if (isThrowable(entities[i])) {
+                    if (ConfigManager.getConfig() != null && ConfigManager.getConfig().throwables != null) {
+                        maxTime = ConfigManager.getConfig().throwables.maxTime;
                     }
                     shouldRemove = (now - timestamps[i] >= maxTime) && timestamps[i] != 0;
                 } else {
@@ -162,21 +182,30 @@ public class Entities {
         double bestDistance = Double.MAX_VALUE;
 
         for (int i = 0; i < 256; i++) {
-            if (initialEntities[i] != null && type[i] == FAKE) {
-                double dx = packet.getX() - initialEntities[i].getX();
-                double dy = packet.getY() - initialEntities[i].getY();
-                double dz = packet.getZ() - initialEntities[i].getZ();
-                double dist = dx * dx + dy * dy + dz * dz;
+            if (initialEntities[i] == null || type[i] != FAKE) continue;
 
-                if (dist < bestDistance) {
-                    bestDistance = dist;
-                    cursorFake = i;
-                    needed = true;
-                }
+            Entity fake = initialEntities[i];
+            if (packet.getType() != fake.getType()) continue;
+
+            double maxDistance = 16.0D;
+            if (isThrowable(fake) && ConfigManager.getConfig() != null
+                    && ConfigManager.getConfig().throwables != null) {
+                maxDistance = ConfigManager.getConfig().throwables.maxDistance;
+            }
+
+            double dx = packet.getX() - fake.getX();
+            double dy = packet.getY() - fake.getY();
+            double dz = packet.getZ() - fake.getZ();
+            double dist = dx * dx + dy * dy + dz * dz;
+
+            if (dist <= maxDistance * maxDistance && dist < bestDistance) {
+                bestDistance = dist;
+                cursorFake = i;
+                needed = true;
             }
         }
 
-        if (needed && bestDistance <= 16.0D) {
+        if (needed) {
             if (ConfigManager.getConfig() != null && ConfigManager.getConfig().debug) {
                 System.out.println("[Eslium] Matched fake entity, removing it. Distance: " + Math.sqrt(bestDistance));
             }

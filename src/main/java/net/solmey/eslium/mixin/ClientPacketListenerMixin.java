@@ -1,6 +1,5 @@
 package net.solmey.eslium.mixin;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -72,33 +71,33 @@ public class ClientPacketListenerMixin {
         if(Data.extractedToBeValidedPackets.containsValue(packet))
             return;
 
-        Iterator<Map.Entry<Long, Packet<ClientGamePacketListener>>> iterator =
-                Data.extractedToBeValidedPackets.entries().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<Long, Packet<ClientGamePacketListener>> entry = iterator.next();
+        Long bestKey = null;
+        Packet<ClientGamePacketListener> bestValue = null;
+        ClientboundAddEntityPacket bestPacket = null;
+        double bestDistanceSq = 4.0D * 4.0D;
+
+        for (Map.Entry<Long, Packet<ClientGamePacketListener>> entry : Data.extractedToBeValidedPackets.entries()) {
             Packet<ClientGamePacketListener> packetToCheck = entry.getValue();
+            if (!(packetToCheck instanceof ClientboundAddEntityPacket cPacket)) continue;
+            if (packet.getType() != cPacket.getType()) continue;
 
-
-            if(packetToCheck instanceof ClientboundAddEntityPacket cPacket) {
-                if(
-                    packet.getType().equals( cPacket.getType() )  &&
-                    packet.getX() == cPacket.getX()               &&
-                    packet.getY() == cPacket.getY()               &&
-                    packet.getZ() == cPacket.getZ()               &&
-                    packet.getXRot() == cPacket.getXRot()         &&
-                    packet.getYRot() == cPacket.getYRot()         &&
-                    packet.getYHeadRot() == cPacket.getYHeadRot()
-                ) {
-                    //System.out.println("ROLLBACK\n");
-                    InteractionManager.showEntities();
-                    Rollback.rollback(cPacket, packet);
-                    InteractionManager.hideEntities();
-
-
-                    iterator.remove();
-                    return;
-                }
+            double dx = packet.getX() - cPacket.getX();
+            double dy = packet.getY() - cPacket.getY();
+            double dz = packet.getZ() - cPacket.getZ();
+            double distanceSq = dx * dx + dy * dy + dz * dz;
+            if (distanceSq < bestDistanceSq) {
+                bestDistanceSq = distanceSq;
+                bestKey = entry.getKey();
+                bestValue = entry.getValue();
+                bestPacket = cPacket;
             }
+        }
+
+        if (bestPacket != null) {
+            InteractionManager.showEntities();
+            Rollback.rollback(bestPacket, packet);
+            InteractionManager.hideEntities();
+            Data.extractedToBeValidedPackets.remove(bestKey, bestValue);
         }
     }
 }
